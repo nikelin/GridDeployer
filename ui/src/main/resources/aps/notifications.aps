@@ -1,0 +1,43 @@
+(:import com.redshape.ui.utils.UIRegistry registry)
+(:import com.api.deployer.notifications.Notification Notification)
+(:import java.util.Date)
+(:import java.lang.System System)
+
+
+(:set deployClass (class "com.api.deployer.ui.connector.DeployAgentConnector" ) )
+(:set out #System.out)
+
+(:define get-app-context (:list)
+    (registry.getContext) )
+
+(:define get-notifications-manager (:list)
+    (registry.getNotificationsManager) )
+
+(:define get-deploy-connector (:list)
+    (begin
+        (:set app-context (get-app-context) )
+        (app-context.getBean  #deployClass) ) )
+
+
+(:set show-ui-notification
+    (:lambda (:list type message)
+        (begin
+            (:set manager (get-notifications-manager) )
+            (:when
+                (:list (eq #type "error") (manager.error #message) )
+                (:list (eq #type "info" ) (manager.info #message) )
+                (manager.info #message ) ) ) ) )
+
+(:set create-notification (:lambda (:list type subject message)
+    (begin
+        (begin
+            (:set notification (:new Notification (:list (NotificationType.valueOf (strtolower #type) ) ) ) )
+            (notification.setSubject #subject)
+            (notification.setMessage #message)
+            (notification.setDate (:new java.util.Date) ) )
+        #notification ) ) )
+
+(:set send-notification (:lambda (:list type subject message)
+    (begin
+        (:set connector (get-deploy-connector) )
+        (connector.sendNotification (car ( create-notification #type #subject #message) ) ) ) ) )

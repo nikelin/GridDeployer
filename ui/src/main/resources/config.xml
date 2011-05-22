@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- Move to spring context -->
+<config>
+    <notifications>
+        <host>192.168.100.104</host>
+        <port>59123</port>
+        <serviceName>notifications</serviceName>
+    </notifications>
+	<ui>
+		<defaults>
+			<server>
+				<host>192.168.100.82</host>
+				<port>55456</port>
+				<service>DeployServer</service>
+			</server>
+		</defaults>
+		<widgets>
+			<widget name="tasks">
+				<class>com.api.deployer.ui.widgets.TasksWidget</class>
+				<config>
+					<maxTasks>20</maxTasks>
+					<refreshInterval>5000</refreshInterval>
+				</config>
+			</widget>
+			<widget name="status">
+				<class>com.api.deployer.ui.widgets.StatusWidget</class>
+			</widget>
+		</widgets>
+		<components>
+			<component name="system" title="System">
+				<class>com.api.deployer.ui.components.system.SystemComponent</class>
+			</component>
+			<component name="software" title="Software">
+				<class>com.api.deployer.ui.components.software.SoftwareComponent</class>
+			</component>
+			<component name="workstations" title="Workstations">
+				<class>com.api.deployer.ui.components.workstations.WorkstationComponent</class>
+			</component>
+            <component name="notifications" title="Notifications">
+                <class>com.api.deployer.ui.components.notifications.NotificationsComponent</class>
+            </component>
+			<component name="connector">
+				<class>com.api.deployer.ui.components.connector.ConnectorComponent</class>
+			</component>
+			<component name="scheduler" title="Scheduler">
+				<class>com.api.deployer.ui.components.scheduler.SchedulerComponent</class>
+			</component>
+			<component name="masterimages" title="Artifactory">
+				<class>com.api.deployer.ui.components.artifactory.ArtifactoryComponent</class>
+			</component>
+			<component name="settings" title="Settings">
+				<class>com.api.deployer.ui.components.settings.SettingsComponent</class>
+			</component>
+			<component name="help" title="Help">
+				<class>com.api.deployer.ui.components.help.HelpComponent</class>
+			</component>
+		</components>
+	</ui>
+</config>

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<meta>
+	<artifacts>
+		<artifact type="DRIVE" uuid="00773239-7a74-4285-b889-f21e0152bec3">
+			<drive>
+				<path>/dev/sda</path>
+			</drive>
+			<partitions>
+				<partition>
+					<uuid>feac35ed-929b-48cd-b394-800f386ac2b5</uuid>
+					<start>1049</start>
+					<end>20500000000</end>
+					<size>205000000000</size>
+					<type>PRIMARY</type>
+					<path>/dev/sda5</path>
+					<name>sda5</name>
+					<number>5</number>
+					<filesystem>StorageFilesystem.EXT4</filesystem>
+					<flags>
+						<flag>boot</flag>
+					</flags>
+				</partition>
+				<partition>
+					<uuid>F46A62EA6A62A956</uuid>
+					<start>1049</start>
+					<end>20500000000</end>
+					<size>205000000000</size>
+					<type>PRIMARY</type>
+					<path>/dev/sda5</path>
+					<name>sda5</name>
+					<number>5</number>
+					<filesystem>StorageFilesystem.EXT4</filesystem>
+					<flags>
+						<flag>boot</flag>
+					</flags>
+				</partition>
+				<partition>
+					<uuid>1AB28F70B28F4F67</uuid>
+					<start>1049</start>
+					<end>20500000000</end>
+					<size>205000000000</size>
+					<type>PRIMARY</type>
+					<path>/dev/sda5</path>
+					<name>sda5</name>
+					<number>5</number>
+					<filesystem>StorageFilesystem.EXT4</filesystem>
+					<flags>
+						<flag>boot</flag>
+					</flags>
+				</partition>
+			</partitions>
+			
+		</artifact>
+	</artifacts>
+</meta>

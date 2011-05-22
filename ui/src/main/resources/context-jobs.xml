@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean id="artifactRestoreJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name">
+            <value>Restore state from artifact</value>
+        </property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.restore.ArtifactRestoreJob</value>
+        </property>
+    </bean>
+
+    <bean id="partitionsBackupJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name">
+            <value>Backup partitions</value>
+        </property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.backup.PartitionsBackupJob</value>
+        </property>
+    </bean>
+
+    <bean id="settingsBackupJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name">
+            <value>Hardware configuration backup</value>
+        </property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.backup.SettingsBackupJob</value>
+        </property>
+    </bean>
+
+    <bean id="driveBackupJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name">
+            <value>Backup storage drive</value>
+        </property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.backup.StorageDriveBackupJob</value>
+        </property>
+    </bean>
+
+    <bean id="restoreJobsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Workstation restore</value></property>
+        <property name="jobs">
+            <set>
+                <ref bean="artifactRestoreJob"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="backupOnlyJobsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Workstation backup</value></property>
+        <property name="jobs">
+            <set>
+                <ref bean="driveBackupJob"/>
+                <ref bean="partitionsBackupJob"/>
+                <ref bean="settingsBackupJob"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="executeSSHScript" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Execute SSH script</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">
+                com.api.deployer.jobs.system.ExecuteScriptJob
+            </value>
+        </property>
+    </bean>
+
+    <bean id="rebootJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Reboot</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">
+                com.api.deployer.jobs.system.RebootJob
+            </value>
+        </property>
+    </bean>
+
+    <bean id="shutdownJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Shutdown</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">
+                com.api.deployer.jobs.system.ShutdownJob
+            </value>
+        </property>
+    </bean>
+
+    <bean id="systemJobsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>System jobs</value></property>
+        <property name="jobs">
+            <set>
+                <ref bean="executeSSHScript"/>
+                <ref bean="rebootJob"/>
+                <ref bean="shutdownJob"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="backupJobsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Backup/Restore jobs</value></property>
+        <property name="childs">
+            <set>
+                <ref bean="backupOnlyJobsCategory"/>
+                <ref bean="restoreJobsCategory"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="addNetworkRouteJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Add route</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.configuration.network.routes.AddRouteJob</value>
+        </property>
+    </bean>
+
+    <bean id="deleteNetworkRouteJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Delete route</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.configuration.network.routes.DelRouteJob</value>
+        </property>
+    </bean>
+
+    <bean id="routesConfigurationCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Routes configuration</value></property>
+        <property name="jobs">
+            <set>
+                <ref bean="addNetworkRouteJob"/>
+                <ref bean="deleteNetworkRouteJob"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="networkConfigurationJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Network configuration</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.configuration.network.NetworkConfigurationJob</value>
+        </property>
+    </bean>
+
+    <bean id="networkJobsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Network devices</value></property>
+        <property name="jobs">
+            <set>
+                <ref bean="networkConfigurationJob"/>
+            </set>
+        </property>
+        <property name="childs">
+            <set>
+                <ref bean="routesConfigurationCategory"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="configurationJobsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Configuration</value></property>
+        <property name="childs">
+            <set>
+                <ref bean="networkJobsCategory"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="newSoftwareChannelJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name">
+            <value>New software channel</value>
+        </property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.software.NewChannelJob</value>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="artifactInstallationJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Artifact installation job</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.software.ArtifactInstallJob</value>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="artifactConfigureJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Artifact configure job</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.software.ConfigureArtifactJob</value>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="repositoryCleanupJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Cleanup repository</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.software.CleanupJob</value>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="softwareAssetsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Software assets</value></property>
+        <property name="jobs">
+            <set>
+                <ref bean="newSoftwareChannelJob"/>
+                <ref bean="artifactInstallationJob"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="agentSetupJob" class="com.api.deployer.ui.data.jobs.Job">
+        <property name="name"><value>Agent setup</value></property>
+        <property name="jobClass">
+            <value type="java.lang.Class">com.api.deployer.jobs.deploy.AgentSetupJob</value>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="deployJobsCategory" class="com.api.deployer.ui.data.jobs.categories.JobCategory">
+        <property name="name"><value>Deploy</value></property>
+        <property name="jobs">
+            <set>
+                <ref bean="agentSetupJob"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="jobsStore" class="com.api.deployer.ui.data.jobs.categories.JobCategoryStore">
+        <property name="records">
+            <set>
+                <ref bean="softwareAssetsCategory"/>
+                <ref bean="configurationJobsCategory"/>
+                <ref bean="systemJobsCategory"/>
+                <ref bean="backupJobsCategory"/>
+                <ref bean="deployJobsCategory"/>
+            </set>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean id="evaluator" scope="singleton"
+          class="com.api.deployer.expressions.evaluation.ExpressionEvaluator">
+        <constructor-arg><ref bean="nativeResourcesLoader"/></constructor-arg>
+        <property name="includes">
+            <value>src/main/resources/aps/init.aps</value>
+        </property>
+    </bean>
+
+    <bean id="addRecipientScript" class="com.api.deployer.ui.data.scripts.Script">
+        <property name="name"><value>Add notifications recipient</value></property>
+        <property name="parameters">
+            <set>
+                <value>address</value>
+                <value>type</value>
+            </set>
+        </property>
+        <property name="description">
+            <value>Add new recipient and relate it to a transport with given type</value>
+        </property>
+        <property name="declaration">
+            <value>
+            </value>
+        </property>
+    </bean>
+
+    <bean id="sendNotificationScript" class="com.api.deployer.ui.data.scripts.Script">
+        <property name="name"><value>Send notification</value></property>
+        <property name="parameters">
+            <set>
+                <value>subject</value>
+                <value>message</value>
+            </set>
+        </property>
+        <property name="description">
+            <value>Send notification with given subject and message to all registered recipients.</value>
+        </property>
+        <property name="declaration">
+            <value>(send-notification ${subject} ${message})</value>
+        </property>
+    </bean>
+
+    <bean id="notificationsCategory" class="com.api.deployer.ui.data.scripts.categories.ScriptCategory">
+        <property name="name"><value>Notifications</value></property>
+        <property name="scripts">
+            <set>
+                <ref bean="sendNotificationScript"/>
+                <ref bean="addRecipientScript"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="scriptsStore" class="com.api.deployer.ui.data.scripts.categories.ScriptCategoriesStore">
+        <property name="records">
+            <set>
+                <ref bean="notificationsCategory"/>
+            </set>
+        </property>
+    </bean>
+
+</beans>

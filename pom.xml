@@ -1,0 +1,94 @@
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<junit.version>4.8.2</junit.version>
+		<log4j.version>1.2.9</log4j.version>
+		<api.version>2.0-SNAPSHOT</api.version>
+		<redshape.as.version>1.0.0A</redshape.as.version>
+		<deployer.build.path>/archives/workspace/api/deployer/build</deployer.build.path>
+	</properties>
+
+	<groupId>com.api</groupId>
+	<artifactId>deployer</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>API GridDeployer</name>
+	<packaging>pom</packaging>
+
+	<modules>
+        <module>artifactory</module>
+		<module>agent</module>
+		<module>server</module>
+		<module>ui</module>
+		<module>jobs</module>
+		<module>core</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${deployer.build.path}/libs</outputDirectory>
+							<useRepositoryLayout>${project.groupId}.${project.artifactId}.${project.extension}</useRepositoryLayout>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${deployer.build.path}/</directory>
+							<excludes>
+								<exclude>resources</exclude>
+							</excludes>
+							<includes>
+								<includes>libs/*</includes>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+        <dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+	</dependencies>
+</project>

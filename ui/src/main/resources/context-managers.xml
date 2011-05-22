@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean scope="singleton" id="viewsManager" class="com.redshape.ui.views.ViewsManager">
+		<constructor-arg><ref bean="centerPlacement"/></constructor-arg>
+	</bean>
+
+	<bean scope="singleton" id="windowsManager" class="com.redshape.ui.windows.swing.WindowsManager"/>
+
+	<bean scope="singleton" id="interactorsFactory" class="com.api.commons.net.io.InteractorsFactory">
+		<property name="interactors">
+			<set>
+				<value type="java.lang.Class">com.api.commons.net.io.interactors.SSHInteractor</value>
+				<value type="java.lang.Class">com.api.commons.net.io.interactors.SambaInteractor</value>
+			</set>
+		</property>
+	</bean>
+
+    <bean scope="prototype" id="xmlObjectsLoader" class="com.redshape.utils.serializing.beans.BeansLoader">
+        <property name="xmlHelper">
+            <ref bean="xmlHelper"/>
+        </property>
+        <property name="resourcesLoader">
+            <ref bean="resourcesLoader"/>
+        </property>
+    </bean>
+
+    <bean scope="prototype" id="binaryObjectsLoader" class="com.redshape.utils.serializing.binary.BinaryLoader"/>
+    <bean scope="prototype" id="binaryObjectsFlusher" class="com.redshape.utils.serializing.binary.BinaryFlusher"/>
+
+    <bean scope="prototype" id="xmlObjectsFlusher" class="com.redshape.utils.serializing.beans.BeansFlusher">
+        <property name="xmlHelper">
+            <ref bean="xmlHelper"/>
+        </property>
+        <property name="resourcesLoader">
+            <ref bean="resourcesLoader"/>
+        </property>
+    </bean>
+
+    <alias alias="objectsLoader" name="binaryObjectsLoader"/>
+    <alias alias="objectsFlusher" name="binaryObjectsFlusher"/>
+
+    <bean scope="singleton" id="stateManager" class="com.redshape.ui.state.UIStateManager">
+        <constructor-arg><ref bean="objectsLoader"/></constructor-arg>
+        <constructor-arg><ref bean="objectsFlusher"/></constructor-arg>
+
+        <property name="doVersioning">
+            <value>false</value>
+        </property>
+        <property name="location">
+            <value>src/main/resources/settings</value>
+        </property>
+        <property name="periodicEnabled">
+            <value>false</value>
+        </property>
+        <property name="periodicInterval">
+            <value>30000</value>
+        </property>
+    </bean>
+
+    <bean scope="singleton" id="notificationsManager"
+          class="com.redshape.ui.notifications.NotificationsManager"/>
+</beans>
