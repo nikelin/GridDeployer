@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <host>192.168.100.104</host>
+    <port>55489</port>
+    <serviceName>Artifactory</serviceName>
+    <maxConnections>500</maxConnections>
+
+    <artifactory>
+        <rootPath>/home/cyril/artifactory</rootPath>
+        <indexPath>/home/cyril/artifactory/index.xml</indexPath>
+    </artifactory>
+</config>

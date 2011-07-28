@@ -1,0 +1,19 @@
+(:import java.lang.String string)
+(:set page
+    (:map
+        (:list title
+            (:list
+                (:lambda (:list value)
+                    (string.println "Page title is" #value ) )
+            ) )
+        (:list meta
+                (:lambda (:list name value)
+                    (string.println "Meta tag " #name " applied with value " #value ) ) )
+        (:list resource
+                (:lambda (:list type src)
+                    (string.println "Resource " #src " imported with a type " #type ) ) )
+        (:list body
+                (:lambda (:list fun)
+                    (string.println "Body data" (#fun) )
+                    ) )
+            ) )

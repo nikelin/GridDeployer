@@ -1,0 +1,59 @@
+"---------------------------------"
+"--     Scripting engine core   --"
+"---------------------------------"
+
+"-- Windows related functions --"
+
+(:define open-window (:list window)
+    (begin) )
+
+(:define close-window (:list window)
+    (begin) )
+
+(:define repaint (:list component)
+    (begin ) )
+
+"-------------------------------"
+"--      Devices functions    --"
+"-------------------------------"
+
+(:define mount-device (:list path mount-path)
+    (begin) )
+
+(:define unmount-device (:list path )
+    (begin) )
+
+(:define is-mounted (:list path)
+    (begin) )
+
+"------------------------------"
+"--     Scheduling functions --"
+"------------------------------"
+
+(:define schedule-job (:list workstation job)
+    (begin) )
+
+(:define configure-job (:list jobSubject jobClass )
+    (begin) )
+
+(:define cancel-job (:list job)
+    (begin) )
+
+(:define list-jobs (:list workstation)
+    (begin) )
+
+(:define pause-job (:list job)
+    (begin) )
+
+(:define resume-job (:list job)
+    (begin) )
+
+"-------------------------------"
+"--     Deploy server api     --"
+"-------------------------------"
+
+(:define connect (:list host port service)
+    (begin) )
+
+(:define disconnect (:list)
+    (begin) )

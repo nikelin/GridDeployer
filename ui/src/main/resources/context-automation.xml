@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean scope="singleton" id="modelsBuilder" class="com.redshape.ui.data.bindings.ViewModelBuilder"/>
+
+	<bean scope="singleton" id="uiBuilder" class="com.redshape.ui.data.bindings.properties.PropertyUIBuilder">
+		<property name="renderers">
+			<map key-type="java.lang.Class" value-type="java.lang.Class">
+				<entry>
+					<key><value type="java.lang.Class">java.lang.Enum</value></key>
+					<value>com.redshape.ui.data.bindings.render.properties.EnumUI</value>
+				</entry>
+				<entry>
+					<key><value type="java.lang.Class">java.lang.String</value></key>
+					<value>com.redshape.ui.data.bindings.render.properties.StringUI</value>
+				</entry>
+				<entry>
+					<key><value type="java.lang.Class">java.lang.Boolean</value></key>
+					<value>com.redshape.ui.data.bindings.render.properties.BooleanUI</value>
+				</entry>
+				<entry>
+					<key><value type="java.lang.Class">com.redshape.utils.IEnum</value></key>
+					<value>com.redshape.ui.data.bindings.render.properties.IEnumUI</value>
+				</entry>
+				<entry>
+					<key><value type="java.lang.Class">java.lang.Number</value></key>
+					<value>com.redshape.ui.data.bindings.render.properties.NumericUI</value>
+				</entry>
+				<entry>
+					<key><value type="java.lang.Class">java.net.URI</value></key>
+					<value>com.api.deployer.ui.bindings.render.properties.URIPropertyUI</value>
+				</entry>
+                <entry>
+                    <key><value type="java.lang.Class">java.net.InetAddress</value></key>
+                    <value>com.redshape.ui.data.bindings.render.properties.StringUI</value>
+                </entry>
+			</map>
+		</property>
+		<property name="listRenderer">
+			<value type="java.lang.Class">com.redshape.ui.data.bindings.render.properties.ListUI</value>
+		</property>
+	</bean>
+
+	<bean scope="singleton" id="viewRendererBuilder" class="com.redshape.ui.data.bindings.render.SwingBuilder">
+		<constructor-arg><ref bean="modelsBuilder"/></constructor-arg>
+		<constructor-arg><ref bean="uiBuilder"/></constructor-arg>
+	</bean>
+
+</beans>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<index>
+    <categories>
+        <category>
+            <name>contents</name>
+            <title>Contents</title>
+            <items>
+                <item name="intro" title="Intro" contents="help/contents/intro.html"/>
+                <item name="referrences" title="Referrences" contents="help/contents/referrences.html"/>
+            </items>
+        </category>
+        <category>
+            <name>workstations</name>
+            <title>Workstations</title>
+            <childs>
+                <category>
+                    <name>Configuration</name>
+                    <childs>
+                        <category>
+                            <name>bootloader</name>
+                            <title>Bootloader</title>
+                            <items>
+                                <item name="pxe" title="PXE Boot" contents="help/contents/bootloader/pxe.html"/>
+                            </items>
+                        </category>
+                    </childs>
+                    <items>
+                        <item name="network" title="Network configuration" contents="help/contents/workstations/network.html"/>
+                        <item name="diskdrive" title="Partitions editor" contents="help/contents/workstations/disk-drives.html"/>
+                    </items>
+                </category>
+                <category>
+                    <name>Backup</name>
+                    <childs>
+                        <category>
+                            <name>drives</name>
+                            <title>Disk drives backup</title>
+                        </category>
+                    </childs>
+                </category>
+            </childs>
+        </category>
+    </categories>
+</index>

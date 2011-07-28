@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>deployer</artifactId>
+		<groupId>com.api</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.api.deployer</groupId>
+	<artifactId>ui</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>GridDeployer Console</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<finalName>ui</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<targetJdk>1.6</targetJdk>
+					<failOnViolation>true</failOnViolation>
+					<linkXRef>false</linkXRef>
+					<goal>check</goal>
+					<skip>true</skip>
+					<verbose>true</verbose>
+					<failurePriority>3</failurePriority>
+					<minimumTokens>100</minimumTokens>
+				</configuration>
+				<executions>
+			        <execution>
+			          <phase>verify</phase>
+			          <goals>
+			            <goal>check</goal>
+			          </goals>
+			        </execution>
+			      </executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>com.api.deployer.ui.App</mainClass>
+							<classpathPrefix>../libs/</classpathPrefix>
+							<customClasspathLayout>$${artifact.groupId}.$${artifact.artifactId}.$${artifact.extension}</customClasspathLayout>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<artifactId>looks</artifactId>
+			<version>2.2.2</version>
+			<groupId>com.jgoodies</groupId>
+		</dependency>
+		<dependency>
+			<artifactId>core</artifactId>
+			<groupId>com.api.deployer</groupId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<artifactId>jobs</artifactId>
+			<groupId>com.api.deployer</groupId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<artifactId>daemon</artifactId>
+			<groupId>com.api</groupId>
+			<version>${api.version}</version>
+		</dependency>
+		<dependency>
+			<artifactId>commons</artifactId>
+			<groupId>com.redshape</groupId>
+			<version>${redshape.as.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.redshape</groupId>
+			<artifactId>ui</artifactId>
+			<version>1.0.0A</version>
+		</dependency>
+	</dependencies>
+
+</project>

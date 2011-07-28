@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<data>
+    <command>
+        <value>ifconfig -a</value>
+        <result>eth0      Link encap:Ethernet  HWaddr 48:5b:39:19:6a:f9
+          inet addr:192.168.100.104  Bcast:192.168.100.255  Mask:255.255.255.0
+          inet6 addr: fe80::4a5b:39ff:fe19:6af9/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:3560609 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1125161 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:866352667 (866.3 MB)  TX bytes:406386334 (406.3 MB)
+          Interrupt:71
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:2182386 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2182386 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:508629259 (508.6 MB)  TX bytes:508629259 (508.6 MB)
+
+vboxnet0  Link encap:Ethernet  HWaddr 0a:00:27:00:00:00
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)</result>
+    </command>
+    <command>
+        <value>route</value>
+        <result>Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.100.0   *               255.255.255.0   U     1      0        0 eth0
+10.0.0.0        *               255.255.0.0     U     0      0        0 eth0
+default         192.168.100.4   0.0.0.0         UG    0      0        0 eth0
+        </result>
+    </command>
+    <command>
+        <value>partprobe -s</value>
+        <result>/dev/sda: msdos partitions 1 2 5\n</result>
+    </command>
+    <command>
+        <value>parted /dev/sda print</value>
+        <result>Model: VMware, VMware Virtual S (scsi)
+Disk /dev/sda: 21.5GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+
+Number  Start   End     Size    Type      File system     Flags
+ 1      1049kB  20.5GB  20.5GB  primary   ext4            boot
+ 2      20.5GB  21.5GB  938MB   extended
+ 5      20.5GB  21.5GB  938MB   logical   linux-swap(v1)
+</result>
+    </command>
+    <command>
+    	<value>blkid /dev/sda1</value>
+    	<result>F46A62EA6A62A956</result>
+    </command>
+    <command>
+    	<value>blkid /dev/sda2</value>
+    	<result>1AB28F70B28F4F67</result>
+    </command>
+    <command>
+    	<value>blkid /dev/sda5</value>
+    	<result>feac35ed-929b-48cd-b394-800f386ac2b5</result>
+    </command>
+</data>

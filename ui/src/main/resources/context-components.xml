@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean scope="singleton" id="componentsLocator" class="com.redshape.ui.components.locators.ConfigBasedLocator">
+    	<constructor-arg><ref bean="config"/></constructor-arg>
+    </bean>
+
+    <bean scope="singleton" id="componentsRegistry" class="com.redshape.ui.components.ComponentsRegistry">
+    	<constructor-arg><ref bean="componentsLocator"/></constructor-arg>
+   	</bean>
+
+   	<bean scope="singleton" id="eastPlacement" class="com.redshape.ui.utils.UIConstants.Area" factory-method="valueOf">
+   		<constructor-arg>
+   			<value>EAST</value>
+   		</constructor-arg>
+   	</bean>
+
+   	<bean scope="singleton" id="centerPlacement" class="com.redshape.ui.utils.UIConstants.Area" factory-method="valueOf">
+   		<constructor-arg>
+   			<value>CENTER</value>
+   		</constructor-arg>
+   	</bean>
+
+   	<!-- UI Contstants -->
+	<bean scope="singleton" id="westPlacement" class="com.redshape.ui.utils.UIConstants.Area" factory-method="valueOf">
+	     <constructor-arg>
+	         <value>WEST</value>
+	     </constructor-arg>
+	 </bean>
+
+	 <bean scope="singleton" id="southPlacement" class="com.redshape.ui.utils.UIConstants.Area" factory-method="valueOf">
+	 	<constructor-arg>
+	 		<value>SOUTH</value>
+	 	</constructor-arg>
+	 </bean>
+
+ 	 <bean scope="singleton" id="northPlacement" class="com.redshape.ui.utils.UIConstants.Area" factory-method="valueOf">
+	 	<constructor-arg>
+	 		<value>NORTH</value>
+	 	</constructor-arg>
+	 </bean>
+
+   	<!-- Widgets -->
+
+   	<bean scope="singleton" id="tasksWidget" class="com.api.deployer.ui.widgets.TasksWidget"/>
+   	<bean scope="singleton" id="statusWidget" class="com.api.deployer.ui.widgets.StatusWidget"/>
+
+   	<bean scope="singleton" id="widgetsManager" class="com.redshape.ui.views.widgets.WidgetsManager">
+   		<constructor-arg>
+   			<map>
+   				<entry>
+   					<key><ref bean="southPlacement"/></key>
+   					<list>
+   						<ref bean="statusWidget"/>
+   					</list>
+   				</entry>
+   			</map>
+   		</constructor-arg>
+   	</bean>
+
+</beans>

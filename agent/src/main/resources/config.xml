@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+	<system>
+		<mountingPath>/home/cyril/images</mountingPath>
+        <!-- Path to agent, artifactory, server jars directory -->
+        <setup>
+            <agentPath>/home/cyril/packages/agent</agentPath>
+            <serverPath>/home/cyril/packages/server</serverPath>
+            <artifactoryPath>/home/cyril/packages/artifactory</artifactoryPath>
+        </setup>
+	</system>
+	<agent>
+		<service>DeployAgent</service>
+		<host>192.168.100.104</host>
+		<port>55400</port>
+		<connections>5</connections>
+		<maxAttempts>5</maxAttempts>
+	</agent>
+	<server>
+		<host>192.168.100.104</host>
+		<port>55456</port>
+		<service>DeployServer</service>
+	</server>
+</config>

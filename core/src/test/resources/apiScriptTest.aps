@@ -1,0 +1,48 @@
+* #####################################################
+* This is test script writen in API Script language v.1
+*
+* @author nikelin
+* #####################################################
+
+(:import java.lang.Class cls)
+(:import-all com.api.deployer.system) 				* will import all classes from specified package 
+												    * which can be accessed by their name: SystemFacade, etc.
+
+(:set system (:new SystemFacade) )
+
+(:define afla (
+		(print (system.getVersion) )
+	) ) 
+	
+(:define create-filter (type) (
+		(:set filter (:new IFilter
+			(:override
+				(:method filter	(filterable)
+					(when
+						(and
+							(eq #filterable.type #type)
+							(#filter.super.filter #filterable)
+						) ) ) ) ) ) )
+		
+(:set devices 
+	(system.getDevices
+		(create-filter #DeviceType.DRIVE) )
+)
+
+(:define loop (from to action)
+	(when
+		* to test operators
+		(not (eq #from #to) )
+		(#action)
+		(loop #from (+ #to 1) (#action) ) )
+
+(:define iterate (collection action)
+	(when
+		(not (empty #collection))
+		(#action (cdr #collection) ) )
+
+(:define print-devices ()
+	(iterate #devices
+		(:lambda (print
+
+(loop 0 10 (:lambda (print-devices) ) )		

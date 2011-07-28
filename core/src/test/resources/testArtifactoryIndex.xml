@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<meta>
+	<version>1.0</version>
+	<timestamp>2412412412</timestamp>
+	
+	<artifacts>
+		<artifact uuid="feac35ed-929b-48cd-b394-800f386ac2b5" timestamp="10003412412" type="DRIVE">
+			<name>Test Drive</name>
+			<description>Drive #2</description>
+			<path>/dev/sda</path>
+			<model>SAMSUNG 333333333333</model>
+		</artifact>
+        <artifact uuid="aeac45ed-929b-48cd-b324-900f386ac6d1"
+                  parent="feac35ed-929b-48cd-b394-800f386ac2b5" timestamp="10003412412" type="PARTITION">
+            <name>sda1</name>
+            <type>PRIMARY</type>
+            <start>0</start>
+            <end>1024</end>
+            <path>/dev/sda1</path>
+            <filesystem>EXT4</filesystem>
+        </artifact>
+	</artifacts>
+</meta>

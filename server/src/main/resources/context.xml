@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.api.deployer"/>
+	
+	<import resource="xml-config.xml"/>
+
+    <import resource="context-notifications.xml"/>
+
+    <import resource="context-jobs.xml"/>
+
+    <bean id="networkConnectionsFactory" class="com.api.commons.net.io.InteractorsFactory">
+        <constructor-arg value="false"/>
+        <property name="interactors">
+            <set>
+                <value>com.api.commons.net.io.interactors.SSHInteractor</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="hasher" class="com.api.commons.hashers.MD5" scope="singleton"/>
+    
+    <bean id="config" class="com.api.commons.config.XMLConfig" scope="singleton">
+        <constructor-arg><ref bean="xmlHelper"/></constructor-arg>
+        <constructor-arg value="config.xml"/>
+    </bean>
+    
+   	<!-- Artifactory -->
+
+	<bean id="artifactoryURI" class="java.net.URI">
+        <constructor-arg>
+            <value>rmi://192.168.100.104:55489/Artifactory</value>
+        </constructor-arg>
+	</bean>
+
+</beans>

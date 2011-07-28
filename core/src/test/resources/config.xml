@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+	<agent>
+		<service>DeployAgent</service>
+		<host>localhost</host>
+		<port>55455</port>
+		<connections>1</connections>
+		<maxAttempts>5</maxAttempts>
+	</agent>
+	<server>
+		<host>localhost</host>
+		<port>55456</port>
+		<service>DeployServer</service>
+	</server>
+</config>

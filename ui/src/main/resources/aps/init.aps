@@ -1,0 +1,11 @@
+"--------------------------"
+"API Script initial context"
+"--------------------------"
+
+(root-path "src/main/resources/aps" )
+(search-path (:list) )
+
+(:include "core.aps" )
+(:include "notifications.aps" )
+(:include "workstations.aps" )
+(:include "artifactory.aps" )
