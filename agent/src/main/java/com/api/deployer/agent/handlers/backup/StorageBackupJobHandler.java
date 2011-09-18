@@ -1,13 +1,6 @@
 package com.api.deployer.agent.handlers.backup;
 
-import java.rmi.RemoteException;
-import java.util.Date;
-import java.util.UUID;
-
-import com.api.deployer.execution.services.IArtifactoryService;
-
 import com.api.deployer.agent.DeployAgent;
-
 import com.api.deployer.backup.BackupException;
 import com.api.deployer.backup.IBackupEngine;
 import com.api.deployer.backup.artifactory.IArtifactoryFacade;
@@ -20,10 +13,7 @@ import com.api.deployer.backup.result.IBackupResult;
 import com.api.deployer.backup.result.storages.IDriveBackupResult;
 import com.api.deployer.backup.result.storages.IPartitionBackupResult;
 import com.api.deployer.backup.storages.IStorageBackupFacade;
-
-import com.api.deployer.system.devices.IDevice;
-import com.api.deployer.system.devices.storage.IStorageDriveDevice;
-import com.api.deployer.system.devices.storage.PartitionFlag;
+import com.api.deployer.execution.services.IArtifactoryService;
 import com.api.deployer.io.transport.IDestination;
 import com.api.deployer.io.transport.mounters.IDestinationMounter;
 import com.api.deployer.io.transport.mounters.IDestinationMountingFacade;
@@ -31,17 +21,29 @@ import com.api.deployer.io.transport.mounters.MountException;
 import com.api.deployer.jobs.backup.IStorageDriveBackupJob;
 import com.api.deployer.jobs.backup.result.BackupJobResult;
 import com.api.deployer.jobs.backup.result.IBackupJobResult;
-import com.api.deployer.jobs.handlers.AbstractAwareJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
 import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.IDevice;
+import com.api.deployer.system.devices.storage.IStorageDriveDevice;
+import com.api.deployer.system.devices.storage.PartitionFlag;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
 
-public class StorageBackupJobHandler extends AbstractAwareJobHandler<IStorageDriveBackupJob, IBackupJobResult<IBackupResult>> {
+import java.rmi.RemoteException;
+import java.util.Date;
+import java.util.UUID;
+
+public class StorageBackupJobHandler extends AbstractJobHandler<IStorageDriveBackupJob, IBackupJobResult<IBackupResult>> {
 	private IBackupEngine<IStorageDriveDevice, IDriveBackupResult>  engine;
+	private ISystemFacade facade;
 
 	public StorageBackupJobHandler( ISystemFacade facade ) {
-		super(facade);
+		this.facade = facade;
 	}
-	
+
+	public ISystemFacade getFacade() {
+		return facade;
+	}
+
 	protected IArtifactoryFacade getArtifactoryFacade() {
 		return this.getContext().getBean( IArtifactoryFacade.class );
 	}
@@ -56,7 +58,6 @@ public class StorageBackupJobHandler extends AbstractAwareJobHandler<IStorageDri
 		return this.getContext().getBean( IDestinationMountingFacade.class );
 	}
 
-	@Override
 	public Integer getProgress() {
 		throw new UnsupportedOperationException("Not implemented");
 	}
@@ -73,7 +74,7 @@ public class StorageBackupJobHandler extends AbstractAwareJobHandler<IStorageDri
 	@Override
 	public synchronized IBackupJobResult<IBackupResult> handle( IStorageDriveBackupJob job ) throws HandlingException {
 		try {
-			IArtifactoryService artifactoryService = this.getManagerContext().getArtifactoryService();
+			IArtifactoryService artifactoryService = this.getContext().getBean(IArtifactoryService.class);
 			if ( artifactoryService == null ) {
 				throw new HandlingException("Artifactory not binded");
 			}
@@ -104,7 +105,7 @@ public class StorageBackupJobHandler extends AbstractAwareJobHandler<IStorageDri
 							  .selectEngine( storageDevice );
 			this.engine.makeSilent(true);
 			
-			IBackupJobResult<IBackupResult> result = this.createJobResult( job.getId() );
+			IBackupJobResult<IBackupResult> result = this.createJobResult( job.getJobId() );
 
 			IDriveBackupResult engineResult = this.engine.save(
 				storageDevice, mounter.mount( destination )

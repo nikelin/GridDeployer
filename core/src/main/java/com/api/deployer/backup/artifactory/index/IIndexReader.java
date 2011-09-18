@@ -1,8 +1,8 @@
 package com.api.deployer.backup.artifactory.index;
 
-import com.api.commons.config.IWritableConfig;
 import com.api.deployer.backup.artifactory.IArtifactoryFacade;
 import com.api.deployer.backup.artifactory.ReaderException;
+import com.redshape.utils.config.IWritableConfig;
 
 public interface IIndexReader {
 	

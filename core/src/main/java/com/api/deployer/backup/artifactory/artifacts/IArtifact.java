@@ -1,10 +1,10 @@
 package com.api.deployer.backup.artifactory.artifacts;
 
+import com.redshape.utils.config.IWritableConfig;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
-
-import com.api.commons.config.IWritableConfig;
 
 public interface IArtifact extends Serializable {
 	

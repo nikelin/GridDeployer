@@ -1,11 +1,11 @@
 package com.api.deployer.io.transport.local.local;
 
-import java.net.URI;
-import java.util.UUID;
-
 import com.api.deployer.io.transport.local.LocalDestination;
 import com.api.deployer.io.transport.mounters.IDestinationMounter;
 import com.api.deployer.io.transport.mounters.MountException;
+
+import java.net.URI;
+import java.util.UUID;
 
 public class LocalMounter implements IDestinationMounter<LocalDestination> {
 	private String mountingPoint;
@@ -35,5 +35,5 @@ public class LocalMounter implements IDestinationMounter<LocalDestination> {
 		return uri.getScheme().equals("file")
 			|| uri.getScheme().equals("");
 	}
-	
+
 }

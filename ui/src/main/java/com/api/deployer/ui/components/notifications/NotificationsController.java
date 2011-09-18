@@ -1,6 +1,5 @@
 package com.api.deployer.ui.components.notifications;
 
-import com.api.daemon.DaemonException;
 import com.api.deployer.notifications.INotification;
 import com.api.deployer.ui.components.notifications.windows.HistoryWindow;
 import com.api.deployer.ui.components.notifications.windows.SettingsWindow;
@@ -8,6 +7,7 @@ import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.connector.NotificationsService;
 import com.api.deployer.ui.data.notifications.Notification;
 import com.api.deployer.ui.data.notifications.NotificationsStore;
+import com.redshape.daemon.DaemonException;
 import com.redshape.ui.Dispatcher;
 import com.redshape.ui.application.AbstractController;
 import com.redshape.ui.application.annotations.Action;

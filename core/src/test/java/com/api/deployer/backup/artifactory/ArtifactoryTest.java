@@ -1,17 +1,7 @@
 package com.api.deployer.backup.artifactory;
 
-import java.util.Date;
-import java.util.UUID;
-
-import org.apache.log4j.Logger;
-import org.junit.Test;
-import static org.junit.Assert.*;
-
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
 import com.api.deployer.AbstractContextAwareTest;
 import com.api.deployer.backup.artifactory.artifacts.ArtifactType;
-import com.api.deployer.backup.artifactory.index.IndexException;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
 import com.api.deployer.backup.artifactory.artifacts.IArtifactBuilder;
 import com.api.deployer.backup.artifactory.artifacts.readers.IDriveArtifactReader;
@@ -20,8 +10,19 @@ import com.api.deployer.backup.artifactory.artifacts.writers.IPartitionArtifactW
 import com.api.deployer.backup.artifactory.index.IArtifactoryIndex;
 import com.api.deployer.backup.artifactory.index.IIndexReader;
 import com.api.deployer.backup.artifactory.index.IIndexWriter;
+import com.api.deployer.backup.artifactory.index.IndexException;
 import com.api.deployer.system.devices.storage.PartitionType;
 import com.api.deployer.system.devices.storage.StorageFilesystem;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
+import java.util.Date;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ArtifactoryTest extends AbstractContextAwareTest<ArtifactoryTest.Attribute> {
 	private static final Logger log = Logger.getLogger( ArtifactoryTest.class );
@@ -61,7 +62,7 @@ public class ArtifactoryTest extends AbstractContextAwareTest<ArtifactoryTest.At
 	}
 	
 	@Test
-	public void testMain() throws ConfigException, InstantiationException, 
+	public void testMain() throws ConfigException, InstantiationException,
 								  IndexException, WriterException, ReaderException {
 		IArtifactoryFacade facade = this.getContext().getBean( IArtifactoryFacade.class );
 		

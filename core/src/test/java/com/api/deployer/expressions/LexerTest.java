@@ -1,24 +1,23 @@
 package com.api.deployer.expressions;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import com.api.deployer.AbstractTest;
+import com.redshape.ascript.EvaluationException;
+import com.redshape.ascript.IEvaluator;
+import com.redshape.ascript.context.IEvaluationContext;
+import com.redshape.ascript.evaluation.ExpressionEvaluator;
+import com.redshape.ascript.language.ast.FunctionTreeNode;
+import com.redshape.ascript.language.ast.ISyntaxTree;
+import com.redshape.ascript.language.impl.Lexer;
+import com.redshape.ascript.language.impl.LexerException;
+import com.redshape.ascript.language.impl.Tokenizer;
+import com.redshape.utils.Function;
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.junit.Test;
 import static org.junit.Assert.*;
-
-import com.api.commons.Function;
-import com.api.commons.IFunction;
-import com.api.deployer.AbstractTest;
-import com.api.deployer.expressions.context.IEvaluationContext;
-import com.api.deployer.expressions.evaluation.ExpressionEvaluator;
-import com.api.deployer.expressions.language.ast.FunctionTreeNode;
-import com.api.deployer.expressions.language.ast.ISyntaxTree;
-import com.api.deployer.expressions.language.impl.Lexer;
-import com.api.deployer.expressions.language.impl.LexerException;
-import com.api.deployer.expressions.language.impl.Tokenizer;
 
 public class LexerTest extends AbstractTest<LexerTest.Attribute> {
 	public enum Attribute {
@@ -40,7 +39,7 @@ public class LexerTest extends AbstractTest<LexerTest.Attribute> {
 		
 		ISyntaxTree tree = lexer.process();
 		log.info( tree );
-		assertTrue( tree.getRoot() instanceof FunctionTreeNode );
+		assertTrue( tree.getRoot() instanceof FunctionTreeNode);
 	}
 	
 	@Test

@@ -1,34 +1,32 @@
 package com.api.deployer.agent.handlers.restore;
 
-import java.util.UUID;
-
 import com.api.deployer.backup.BackupException;
 import com.api.deployer.backup.IBackupEngine;
 import com.api.deployer.backup.result.storages.IPartitionBackupResult;
-import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.jobs.backup.IPartitionsBackupJob;
 import com.api.deployer.jobs.backup.result.IBackupJobResult;
-import com.api.deployer.jobs.handlers.AbstractAwareJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
 import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.storage.IStorageDevicePartition;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
 
-public class PartitionsBackupJobHandler extends AbstractAwareJobHandler<
+import java.util.UUID;
+
+public class PartitionsBackupJobHandler extends AbstractJobHandler<
 											IPartitionsBackupJob, IBackupJobResult<IPartitionBackupResult>> {
 	private IBackupEngine<IStorageDevicePartition, IPartitionBackupResult> engine;
-	
-	public PartitionsBackupJobHandler(ISystemFacade facade) {
-		super(facade);
-	}
+	private ISystemFacade facade;
 
-	@Override
-	public Integer getProgress() {
-		throw new UnsupportedOperationException("Operation not implemented");
+	public PartitionsBackupJobHandler(ISystemFacade facade) {
+		super();
+
+		this.facade = facade;
 	}
 
 	@Override
 	public synchronized IBackupJobResult<IPartitionBackupResult> handle(IPartitionsBackupJob job)
 			throws HandlingException {
-		return this.createJobResult( job.getId() );
+		return this.createJobResult( job.getJobId() );
 	}
 
 	@Override

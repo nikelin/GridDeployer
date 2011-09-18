@@ -98,19 +98,14 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<artifactId>daemon</artifactId>
-			<groupId>com.api</groupId>
-			<version>${api.version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>commons</artifactId>
+			<artifactId>daemons</artifactId>
 			<groupId>com.redshape</groupId>
 			<version>${redshape.as.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.redshape</groupId>
 			<artifactId>ui</artifactId>
-			<version>1.0.0A</version>
+			<version>${redshape.as.version}</version>
 		</dependency>
 	</dependencies>
 

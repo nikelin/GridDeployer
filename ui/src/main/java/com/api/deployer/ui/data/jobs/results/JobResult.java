@@ -1,6 +1,6 @@
 package com.api.deployer.ui.data.jobs.results;
 
-import com.api.deployer.jobs.result.JobResultAttribute;
+import com.redshape.daemon.jobs.result.JobResultAttribute;
 import com.redshape.ui.data.AbstractModelData;
 
 import java.util.Date;

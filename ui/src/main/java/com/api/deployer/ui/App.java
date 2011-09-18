@@ -49,7 +49,7 @@ public class App extends AbstractApplication {
 	   
 	   super.init();
 	}
-	
+
 	protected static ApplicationContext loadContext( String contextPath ) {
         File file = new File(contextPath);
         if (file.exists()) {

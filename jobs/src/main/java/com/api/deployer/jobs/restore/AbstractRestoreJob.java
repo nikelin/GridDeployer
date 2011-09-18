@@ -1,11 +1,10 @@
 package com.api.deployer.jobs.restore;
 
-import com.api.commons.bindings.annotations.ElementType;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
-
-import com.api.deployer.jobs.AbstractJob;
 import com.redshape.bindings.annotations.Bindable;
+import com.redshape.bindings.annotations.ElementType;
 import com.redshape.bindings.types.BindableType;
+import com.redshape.daemon.jobs.AbstractJob;
 
 import java.util.UUID;
 

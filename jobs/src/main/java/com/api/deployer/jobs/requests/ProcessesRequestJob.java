@@ -1,8 +1,8 @@
 package com.api.deployer.jobs.requests;
 
-import com.api.deployer.jobs.AbstractJob;
-import com.api.deployer.jobs.result.JobResultAttribute;
 import com.redshape.bindings.annotations.Bindable;
+import com.redshape.daemon.jobs.AbstractJob;
+import com.redshape.daemon.jobs.result.JobResultAttribute;
 
 import java.util.UUID;
 
@@ -28,8 +28,8 @@ public class ProcessesRequestJob extends AbstractJob {
     @Bindable( name = "User" )
     private String user;
 
-    public ProcessesRequestJob( UUID agentId ) {
-        super( agentId );
+    public ProcessesRequestJob() {
+        this.setJobId( UUID.randomUUID() );
     }
 
     public void setUser( String user ) {

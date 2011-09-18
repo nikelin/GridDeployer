@@ -1,9 +1,9 @@
 package com.api.deployer.backup.artifactory.filters;
 
-import java.util.UUID;
-
-import com.api.commons.IFilter;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
+import com.redshape.utils.IFilter;
+
+import java.util.UUID;
 
 public class ChildArtifactsFilter implements IFilter<IArtifact> {
 	private UUID parentId;

@@ -1,37 +1,30 @@
 package com.api.deployer.agent;
 
-import com.api.daemon.*;
-import com.api.daemon.services.Connector;
-import com.api.deployer.execution.services.IArtifactoryService;
-
-import com.api.deployer.execution.services.IDeployServerService;
-import com.api.deployer.services.ClientsFactory;
-import com.api.deployer.services.ServerFactory;
-import org.apache.log4j.Logger;
-
-import java.io.IOException;
-
-import java.net.URI;
-import java.rmi.RemoteException;
-import java.util.*;
-import java.net.MalformedURLException;
-
-import com.api.commons.StringUtils;
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.events.AbstractEvent;
-import com.api.commons.events.IEventListener;
-import com.api.commons.net.broadcast.DiscoveryService;
-import com.api.commons.net.broadcast.DiscoveryService.DiscoveryServiceEvent.DiscoveredEvent;
-
-import com.api.daemon.traits.IPublishableDaemon;
-
 import com.api.deployer.agent.services.DeployAgentService;
 import com.api.deployer.execution.IExecutorDescriptor;
 import com.api.deployer.execution.IJobExecutor;
 import com.api.deployer.execution.IJobsDispatcher;
 import com.api.deployer.execution.SimpleExecutorDescriptor;
+import com.api.deployer.execution.services.IArtifactoryService;
+import com.api.deployer.execution.services.IDeployServerService;
+import com.api.deployer.services.ClientsFactory;
+import com.api.deployer.services.ServerFactory;
 import com.api.deployer.system.ISystemFacade;
+import com.redshape.daemon.*;
+import com.redshape.daemon.services.Connector;
+import com.redshape.daemon.traits.IPublishableDaemon;
+import com.redshape.io.net.broadcast.DiscoveryService;
+import com.redshape.utils.StringUtils;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.events.AbstractEvent;
+import com.redshape.utils.events.IEventListener;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.net.URI;
+import java.rmi.RemoteException;
+import java.util.*;
 
 /**
  * Deployment agent daemon which will be accessible thought RMI.
@@ -116,17 +109,19 @@ public class DeployAgent extends AbstractRMIDaemon<DaemonAttributes>
 	public DeployAgent( String contextPath ) throws DaemonException, ConfigException {
 		super(contextPath);
 		
-		this.setThreadExceptionsHandler( new Thread.UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				log.info("Exception in thread: " + t.getId() );
-				log.error( e.getMessage(), e );
-			}
-		});
-		
 		this.init();
 	}
-	
+
+	@Override
+	public boolean ping() {
+		return false;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public String status() {
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
 	public void setId( UUID id ) {
 		this.id = id;
 	}
@@ -237,7 +232,7 @@ public class DeployAgent extends AbstractRMIDaemon<DaemonAttributes>
 	}
 
 	@Override
-	public void publish() throws DaemonPublishException {
+	public void publish() throws DaemonException {
 		try {
 			String serviceName = this.<String>getAttribute( DaemonAttributes.SERVICE_NAME );
 			log.info("Starting service with name: " + serviceName );
@@ -246,7 +241,7 @@ public class DeployAgent extends AbstractRMIDaemon<DaemonAttributes>
 
 			this.exportService(this.service);
 		} catch ( Throwable e ) {
-			throw new DaemonPublishException( e.getMessage(), e );
+			throw new DaemonException( e.getMessage(), e );
 		}
 	}
 
@@ -390,14 +385,14 @@ public class DeployAgent extends AbstractRMIDaemon<DaemonAttributes>
 		service.discoverer(true);
 		service.addDiscoveryPort( discoveryPort );
 		
-		service.addEventListener( DiscoveredEvent.class, new IEventListener<DiscoveredEvent>() {
+		service.addEventListener( DiscoveryService.DiscoveryServiceEvent.DiscoveredEvent.class, new IEventListener<DiscoveryService.DiscoveryServiceEvent.DiscoveredEvent>() {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 7714913618955166131L;
 
 			@Override
-			public void handleEvent( DiscoveredEvent event ) {
+			public void handleEvent( DiscoveryService.DiscoveryServiceEvent.DiscoveredEvent event ) {
 				Integer port = event.getPort();
 				String host = event.getAddress().getHostAddress();
 				

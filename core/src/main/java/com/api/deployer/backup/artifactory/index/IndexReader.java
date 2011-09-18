@@ -1,16 +1,16 @@
 package com.api.deployer.backup.artifactory.index;
 
-import java.io.File;
-
-import com.api.commons.XMLHelper;
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IWritableConfig;
-import com.api.commons.config.IConfig;
-import com.api.commons.config.XMLConfig;
 import com.api.deployer.backup.artifactory.ArtifactoryVersion;
 import com.api.deployer.backup.artifactory.IArtifactoryFacade;
 import com.api.deployer.backup.artifactory.ReaderException;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.config.IWritableConfig;
+import com.redshape.utils.config.XMLConfig;
+import com.redshape.utils.helpers.XMLHelper;
+
+import java.io.File;
 
 public class IndexReader implements IIndexReader {
 	private IArtifactoryFacade artifactoryFacade;

@@ -1,7 +1,5 @@
 package com.api.deployer.ui.components.connector.windows;
 
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.redshape.ui.Dispatcher;
 import com.redshape.ui.application.events.AppEvent;
@@ -10,6 +8,8 @@ import com.redshape.ui.application.events.UIEvents;
 import com.redshape.ui.components.InteractionAction;
 import com.redshape.ui.panels.FormPanel;
 import com.redshape.ui.utils.UIRegistry;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
 import com.redshape.validators.impl.common.NotEmptyValidator;
 import com.redshape.validators.impl.common.NumericStringValidator;
 import org.apache.log4j.Logger;
@@ -18,7 +18,6 @@ import javax.swing.*;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 
 public class ConfigWindow extends JFrame {
 	public static String DEFAULT_HOST = "localhost";

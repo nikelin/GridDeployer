@@ -1,6 +1,6 @@
 package com.api.deployer.jobs.requests;
 
-import com.api.deployer.jobs.AbstractJob;
+import com.redshape.daemon.jobs.AbstractJob;
 
 import java.util.UUID;
 

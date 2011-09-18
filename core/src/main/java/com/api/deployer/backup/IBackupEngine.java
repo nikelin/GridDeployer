@@ -1,12 +1,11 @@
 package com.api.deployer.backup;
 
-import java.util.UUID;
-
-import com.api.commons.config.IConfig;
 import com.api.deployer.backup.result.IBackupResult;
-
 import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.devices.storage.StorageFilesystem;
+import com.redshape.utils.config.IConfig;
+
+import java.util.UUID;
 
 /**
  * Interface for backup engines such like partclone, fsarchiver, partimage, etc.

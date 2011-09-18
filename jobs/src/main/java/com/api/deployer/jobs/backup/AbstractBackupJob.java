@@ -1,15 +1,13 @@
 package com.api.deployer.jobs.backup;
 
-import java.util.UUID;
-
 import com.api.deployer.backup.compression.CompressionLevel;
 import com.api.deployer.backup.compression.CompressionMethod;
-import com.api.deployer.io.transport.IDestination;
-import com.api.deployer.io.transport.ssh.SSHDestination;
-import com.api.deployer.jobs.AbstractJob;
 import com.redshape.bindings.annotations.Bindable;
 import com.redshape.bindings.annotations.BindableReader;
 import com.redshape.bindings.annotations.BindableWriter;
+import com.redshape.daemon.jobs.AbstractJob;
+
+import java.util.UUID;
 
 public abstract class AbstractBackupJob extends AbstractJob implements IBackupJob {
 	private static final long serialVersionUID = 3296386388356264648L;

@@ -2,8 +2,7 @@ package com.api.deployer.jobs.backup;
 
 import com.api.deployer.backup.compression.CompressionLevel;
 import com.api.deployer.backup.compression.CompressionMethod;
-import com.api.deployer.io.transport.IDestination;
-import com.api.deployer.jobs.IJob;
+import com.redshape.daemon.jobs.IJob;
 
 public interface IBackupJob extends IJob {
 	

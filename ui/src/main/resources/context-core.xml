@@ -16,20 +16,15 @@
         <constructor-arg value="config.xml"/>
     </bean>
 
-    <bean id="nativeConfig" class="com.api.commons.config.XMLConfig" scope="singleton">
-        <constructor-arg><ref bean="nativeXmlHelper"/></constructor-arg>
-        <constructor-arg value="config.xml"/>
-    </bean>
-
     <bean scope="singleton" id="artifactoryConnector"
           class="com.api.deployer.ui.connector.ArtifactoryConnector"/>
 
     <bean scope="singleton" id="deployAgentConnector" class="com.api.deployer.ui.connector.DeployAgentConnector"
-    	p:config-ref="nativeConfig"/>
+    	p:config-ref="config"/>
 
     <bean scope="singleton" id="notificationsService"
           class="com.api.deployer.ui.connector.NotificationsService">
-        <constructor-arg><ref bean="nativeConfig"/></constructor-arg>
+        <constructor-arg><ref bean="config"/></constructor-arg>
     </bean>
 
     <bean id="logsWaiter" class="com.api.deployer.ui.utils.DefaultLogsWaiter"/>

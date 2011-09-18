@@ -47,15 +47,20 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<artifactId>daemon</artifactId>
-			<groupId>com.api</groupId>
-			<version>${api.version}</version>
+        <dependency>
+            <groupId>com.redshape</groupId>
+            <artifactId>ascript</artifactId>
+            <version>${redshape.as.version}</version>
+        </dependency>
+        <dependency>
+			<artifactId>commons</artifactId>
+			<groupId>com.redshape</groupId>
+			<version>${redshape.as.version}</version>
 		</dependency>
 		<dependency>
-			<artifactId>commons</artifactId>
-			<groupId>com.api</groupId>
-			<version>${api.version}</version>
+			<artifactId>daemons</artifactId>
+			<groupId>com.redshape</groupId>
+			<version>${redshape.as.version}</version>
 		</dependency>
 	</dependencies>
 

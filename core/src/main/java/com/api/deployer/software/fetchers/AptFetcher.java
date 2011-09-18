@@ -1,16 +1,15 @@
 package com.api.deployer.software.fetchers;
 
-import com.api.commons.net.fetch.FetcherException;
-import com.api.commons.net.fetch.http.jsoup.HttpFetcher;
 import com.api.deployer.software.ISoftwareArtifact;
 import com.api.deployer.software.channels.ChannelFetchException;
 import com.api.deployer.software.channels.ISoftwareChannel;
 import com.api.deployer.software.channels.ISoftwareChannelMeta;
 import com.api.deployer.software.channels.SoftwareChannelMeta;
 import com.api.deployer.system.ISystemFacade;
+import com.redshape.io.net.fetch.FetcherException;
+import com.redshape.io.net.fetch.http.jsoup.HttpFetcher;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 
 /**

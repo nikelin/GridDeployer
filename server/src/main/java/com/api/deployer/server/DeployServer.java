@@ -1,29 +1,26 @@
 package com.api.deployer.server;
 
-import java.io.IOException;
-import java.rmi.registry.Registry;
-import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import com.api.daemon.*;
-
-import org.apache.log4j.Logger;
-
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.events.AbstractEvent;
-import com.api.commons.events.IEventListener;
-import com.api.commons.net.Utils;
-import com.api.commons.net.broadcast.DiscoveryService;
-
-import com.api.daemon.traits.IPublishableDaemon;
 import com.api.deployer.server.services.DeployServerService;
 import com.api.deployer.services.ClientsFactory;
 import com.api.deployer.services.ServerFactory;
+import com.redshape.daemon.AbstractRMIDaemon;
+import com.redshape.daemon.DaemonAttributes;
+import com.redshape.daemon.DaemonException;
+import com.redshape.daemon.traits.IPublishableDaemon;
+import com.redshape.io.net.broadcast.DiscoveryService;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.events.AbstractEvent;
+import com.redshape.utils.events.IEventListener;
+import com.redshape.utils.net.Utils;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.rmi.registry.Registry;
+import java.util.Date;
 
 public class DeployServer extends AbstractRMIDaemon<DaemonAttributes>
-						  implements IPublishableDaemon<Registry,DaemonAttributes>{
+						  implements IPublishableDaemon<Registry,DaemonAttributes> {
 	private static final long serialVersionUID = -3022533290026140214L;
 
 	private static final Logger log = Logger.getLogger( DeployServer.class );
@@ -70,14 +67,16 @@ public class DeployServer extends AbstractRMIDaemon<DaemonAttributes>
 	
 	public DeployServer( String contextPath ) throws ConfigException, DaemonException {
 		super(contextPath);
-		
-		this.setThreadExceptionsHandler( new Thread.UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				log.info("Exception in thread: " + t.getId() );
-				log.error( e.getMessage(), e );
-			}
-		});
+	}
+
+	@Override
+	public boolean ping() {
+		return false;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public String status() {
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	protected Boolean isDiscoveryEnabled() {
@@ -90,7 +89,7 @@ public class DeployServer extends AbstractRMIDaemon<DaemonAttributes>
 	}
 	
 	@Override
-	public void publish() throws DaemonPublishException {
+	public void publish() throws DaemonException {
 		try {
 			String serviceName = this.<String>getAttribute( Attributes.SERVICE_NAME );
 			log.info("Starting service with name: " + serviceName );
@@ -99,12 +98,12 @@ public class DeployServer extends AbstractRMIDaemon<DaemonAttributes>
 			
 			this.raiseEvent( new Events.PublishedEvent() );
 		} catch ( Throwable e ) {
-			throw new DaemonPublishException( e.getMessage(), e );
+			throw new DaemonException( e.getMessage(), e );
 		}
 	}
 	
 	@Override
-	public void onStarted() throws DaemonPublishException {
+	public void onStarted() throws DaemonException {
 		if ( this.doPublishing() ) {
 			this.publish();
 		}
@@ -127,13 +126,11 @@ public class DeployServer extends AbstractRMIDaemon<DaemonAttributes>
 		return this.<Integer>getAttribute( Attributes.MAX_CONNECTIONS );
 	}
 	
-	@Override
-	public ExecutorService createThreadExecutor() {
-		return Executors.newFixedThreadPool(1);
-	}
-	
 	protected void startDiscoveryService() throws IOException {
-		final DiscoveryService service = new DiscoveryService( this.getHost(), Utils.getAvailable( this.getPort() ) );
+		final DiscoveryService service = new DiscoveryService(
+			this.getHost(),
+			Utils.getAvailable(this.getPort())
+		);
 		service.setAssociatedPort( this.getPort() );
 		service.discoverable(true);
 		service.discoverer(false);

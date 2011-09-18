@@ -1,10 +1,10 @@
 package com.api.deployer.ui.components.system;
 
-import com.api.daemon.DaemonException;
-import com.api.daemon.DaemonState;
 import com.api.deployer.io.transport.URIDestination;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.connector.NotificationsService;
+import com.redshape.daemon.DaemonException;
+import com.redshape.daemon.DaemonState;
 import com.redshape.ui.Dispatcher;
 import com.redshape.ui.application.events.AppEvent;
 import com.redshape.ui.application.events.IEventHandler;

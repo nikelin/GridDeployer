@@ -1,10 +1,10 @@
 package com.api.deployer.backup.artifactory.artifacts;
 
+import com.redshape.utils.config.IWritableConfig;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
-
-import com.api.commons.config.IWritableConfig;
 
 public class Artifact implements IArtifact {
 	private static final long serialVersionUID = -429312236313228172L;

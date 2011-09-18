@@ -1,11 +1,9 @@
 package com.api.deployer.ui.data.jobs.loaders;
 
-import com.api.deployer.jobs.IJob;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.data.jobs.Job;
-import com.api.deployer.ui.data.jobs.JobStore;
-import com.api.deployer.ui.data.jobs.categories.JobCategory;
 import com.api.deployer.ui.data.jobs.categories.JobCategoryStore;
+import com.redshape.daemon.jobs.IJob;
 import com.redshape.ui.data.loaders.AbstractDataLoader;
 import com.redshape.ui.data.loaders.LoaderException;
 import com.redshape.ui.utils.UIRegistry;
@@ -44,9 +42,8 @@ public class ScheduleJobsLoader extends AbstractDataLoader<Job> {
                     jobItem = new Job( jobItem );
                 }
 
-                jobItem.setScope( job.getScope() );
                 jobItem.setState( job.getState() );
-                jobItem.setId( job.getId() );
+                jobItem.setId( job.getJobId() );
                 jobItem.setJob( job );
                 jobItem.setRelatedObject( job );
 

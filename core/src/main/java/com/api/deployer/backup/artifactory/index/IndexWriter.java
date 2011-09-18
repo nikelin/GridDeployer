@@ -1,19 +1,19 @@
 package com.api.deployer.backup.artifactory.index;
 
+import com.api.deployer.backup.artifactory.IArtifactoryFacade;
+import com.api.deployer.backup.artifactory.WriterException;
+import com.api.deployer.backup.artifactory.artifacts.IArtifact;
+import com.api.deployer.backup.artifactory.artifacts.writers.IArtifactWriter;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.config.IWritableConfig;
+import com.redshape.utils.config.XMLConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.config.IWritableConfig;
-import com.api.commons.config.XMLConfig;
-import com.api.deployer.backup.artifactory.IArtifactoryFacade;
-import com.api.deployer.backup.artifactory.WriterException;
-import com.api.deployer.backup.artifactory.artifacts.IArtifact;
-import com.api.deployer.backup.artifactory.artifacts.writers.IArtifactWriter;
 
 public class IndexWriter implements IIndexWriter {
 	private IArtifactoryFacade artifactoryFacade;

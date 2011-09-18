@@ -1,9 +1,5 @@
 package com.api.deployer.backup.storages;
 
-import java.util.Map;
-
-import org.springframework.context.ApplicationContext;
-
 import com.api.deployer.backup.BackupException;
 import com.api.deployer.backup.IBackupEngine;
 import com.api.deployer.backup.result.IBackupResult;
@@ -12,6 +8,9 @@ import com.api.deployer.backup.result.storages.IPartitionBackupResult;
 import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.system.devices.storage.IStorageDriveDevice;
 import com.api.deployer.system.devices.storage.StorageFilesystem;
+import org.springframework.context.ApplicationContext;
+
+import java.util.Map;
 
 public interface IStorageBackupFacade {
 
@@ -41,4 +40,5 @@ public interface IStorageBackupFacade {
 	 * Is current engine work in sinlent mode
 	 */
 	public boolean isSilent();
+
 }

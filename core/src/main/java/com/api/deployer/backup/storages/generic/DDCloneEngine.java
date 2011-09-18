@@ -1,17 +1,16 @@
 package com.api.deployer.backup.storages.generic;
 
-import java.io.IOException;
-
-import org.apache.log4j.Logger;
-
-import com.api.commons.config.IConfig;
 import com.api.deployer.backup.AbstractBackupEngine;
 import com.api.deployer.backup.BackupException;
 import com.api.deployer.backup.result.storages.IPartitionBackupResult;
 import com.api.deployer.backup.result.storages.PartitionBackupResult;
-import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.utils.config.IConfig;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
 
 public class DDCloneEngine extends AbstractBackupEngine<IStorageDevicePartition, IPartitionBackupResult>{
 	@SuppressWarnings("unused")

@@ -1,5 +1,7 @@
 package com.api.deployer.ui.bindings.render.properties;
 
+import javax.swing.*;
+
 import com.redshape.bindings.types.IBindable;
 import com.redshape.ui.application.UIException;
 import com.redshape.ui.data.bindings.properties.IPropertyUI;

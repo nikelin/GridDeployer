@@ -1,5 +1,7 @@
 package com.api.deployer.ui.components.monitoring;
 
+import com.redshape.ui.components.actions.ComponentAction;
+
 import com.redshape.ui.application.events.components.ComponentEvents;
 import com.redshape.ui.components.AbstractComponent;
 import com.redshape.ui.components.actions.ComponentAction;

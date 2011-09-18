@@ -1,12 +1,13 @@
 package com.api.deployer.ui.components.workstations;
 
-import com.api.deployer.jobs.activation.JobActivationProfile;
+import com.api.deployer.jobs.JobScope;
 import com.api.deployer.jobs.deploy.AgentSetupJob;
 import com.api.deployer.ui.components.workstations.views.ConsoleView;
 import com.api.deployer.ui.components.workstations.views.ListView;
 import com.api.deployer.ui.components.workstations.windows.DeployWindow;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.data.workstations.Workstation;
+import com.redshape.daemon.jobs.activation.JobActivationProfile;
 import com.redshape.ui.Dispatcher;
 import com.redshape.ui.application.AbstractController;
 import com.redshape.ui.application.UnhandledUIException;
@@ -80,10 +81,10 @@ public class WorkstationsController extends AbstractController {
 
         try {
             if ( profile == null ) {
-                this.getConnector().executeJob( job );
+                this.getConnector().executeJob( JobScope.SERVER, null, job );
                 notifier.info("Workstation setup being processing!");
             } else {
-                this.getConnector().scheduleJob( job, profile );
+                this.getConnector().scheduleJob( null, job, profile );
                 notifier.info("Workstation setup successfuly scheduled!");
             }
         } catch ( RemoteException e ) {
@@ -151,7 +152,7 @@ public class WorkstationsController extends AbstractController {
 		System.out.println("Exit requested");
 		Dispatcher.get().forwardEvent(UIEvents.Core.Exit);
 	}
-	
+
 	private void showDelayConfigurationDialog( String confirmMessage,
                            String dialogTitle, String message, EventType event, Object... args ) {
 		JFrame parent = UIRegistry.getRootContext();

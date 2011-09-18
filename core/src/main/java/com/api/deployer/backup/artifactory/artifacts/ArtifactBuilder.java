@@ -1,11 +1,11 @@
 package com.api.deployer.backup.artifactory.artifacts;
 
-import java.util.UUID;
-
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IWritableConfig;
-import com.api.commons.config.XMLConfig;
 import com.api.deployer.backup.artifactory.ArtifactoryVersion;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IWritableConfig;
+import com.redshape.utils.config.XMLConfig;
+
+import java.util.UUID;
 
 public class ArtifactBuilder implements IArtifactBuilder {
 	private ArtifactoryVersion version;
@@ -49,7 +49,7 @@ public class ArtifactBuilder implements IArtifactBuilder {
 	@Override
 	public IArtifact createArtifact(ArtifactType type, IWritableConfig config ) throws InstantiationException {
 		try {
-			config = config == null ? XMLConfig.createEmpty("artifact") 
+			config = config == null ? XMLConfig.createEmpty("artifact")
 									: config;
 			
 			IArtifact artifact = new Artifact( type, config );

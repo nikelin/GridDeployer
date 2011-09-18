@@ -1,13 +1,13 @@
 package com.api.deployer.ui.data.jobs;
 
-import java.util.UUID;
-
-import com.api.deployer.jobs.IJob;
 import com.api.deployer.jobs.JobScope;
-import com.api.deployer.jobs.JobState;
 import com.api.deployer.ui.data.jobs.categories.JobCategory;
 import com.api.deployer.ui.data.workstations.IDeploySubject;
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.JobStatus;
 import com.redshape.ui.data.AbstractModelData;
+
+import java.util.UUID;
 
 public class Job extends AbstractModelData {
 	private static final long serialVersionUID = 8253025593292510523L;
@@ -51,11 +51,11 @@ public class Job extends AbstractModelData {
         return this.get( JobModel.SCOPE );
     }
 
-    public void setState( JobState state ) {
+    public void setState( JobStatus state ) {
         this.set(JobModel.STATE, state );
     }
 
-    public JobState getState() {
+    public JobStatus getState() {
         return this.get( JobModel.STATE );
     }
 

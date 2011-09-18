@@ -1,8 +1,8 @@
 package com.api.deployer.backup.artifactory.index;
 
-import com.api.commons.config.IConfig;
 import com.api.deployer.backup.artifactory.IArtifactoryFacade;
 import com.api.deployer.backup.artifactory.WriterException;
+import com.redshape.utils.config.IConfig;
 
 /**
  * Responsible for transforming artifactory index structure to XML

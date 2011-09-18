@@ -1,7 +1,7 @@
 package com.api.deployer.execution.services;
 
-import com.api.daemon.IRemoteService;
 import com.api.deployer.notifications.INotification;
+import com.redshape.daemon.IRemoteService;
 
 import java.rmi.RemoteException;
 

@@ -1,14 +1,14 @@
 package com.api.deployer.system.scanners.mock;
 
-import com.api.commons.IFilter;
+import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.PlatformAttribute;
 import com.api.deployer.system.configurers.IPartitionsEditor;
 import com.api.deployer.system.configurers.network.INetworkConfigurer;
+import com.api.deployer.system.console.IConsole;
 import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.devices.storage.IStorageDriveDevice;
 import com.api.deployer.system.scanners.ScannerException;
-import com.api.deployer.system.ISystemFacade;
-import com.api.deployer.system.PlatformAttribute;
-import com.api.deployer.system.console.IConsole;
+import com.redshape.utils.IFilter;
 
 import java.io.IOException;
 import java.util.Collection;

@@ -1,9 +1,8 @@
 package com.api.deployer.jobs.deploy;
 
-import com.api.deployer.jobs.AbstractJob;
-import com.api.deployer.jobs.JobScope;
 import com.redshape.bindings.annotations.Bindable;
 import com.redshape.bindings.annotations.BindableAttributes;
+import com.redshape.daemon.jobs.AbstractJob;
 
 import java.net.URI;
 import java.util.UUID;
@@ -40,7 +39,7 @@ public class AgentSetupJob extends AbstractJob {
     }
 
     public AgentSetupJob(UUID agentId) {
-        super(agentId, JobScope.SERVER);
+        super(agentId);
     }
 
     public String getUser() {

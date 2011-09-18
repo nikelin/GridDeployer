@@ -10,7 +10,7 @@ import com.redshape.ui.components.InteractionAction;
 import com.redshape.ui.utils.UIRegistry;
 
 import javax.swing.*;
-import java.awt.Dialog.ModalExclusionType;
+import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,7 +21,7 @@ public class JobProgressMonitor extends JFrame {
 	
 	private JProgressBar progressBar;
 	private UUID descriptor;
-	private Timer timer = new Timer(true);
+	private java.util.Timer timer = new Timer();
 	
 	public JobProgressMonitor( UUID descriptor ) {
 		super();
@@ -114,7 +114,7 @@ public class JobProgressMonitor extends JFrame {
 		this.setTitle("Processing job...");
 		this.setSize( 300, 65 );
 		this.setResizable(false);
-		this.setModalExclusionType( ModalExclusionType.TOOLKIT_EXCLUDE );
+		this.setModalExclusionType( Dialog.ModalExclusionType.TOOLKIT_EXCLUDE );
 	}
 	
 	protected void stop() {

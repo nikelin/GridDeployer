@@ -3,6 +3,7 @@ package com.api.deployer.ui.components.workstations.windows;
 import com.api.deployer.jobs.deploy.AgentSetupJob;
 import com.api.deployer.ui.components.workstations.WorkstationComponent;
 import com.redshape.ui.Dispatcher;
+
 import com.redshape.ui.application.UIException;
 import com.redshape.ui.application.UnhandledUIException;
 import com.redshape.ui.application.events.AppEvent;
@@ -15,7 +16,6 @@ import com.redshape.ui.utils.UIRegistry;
 
 import javax.swing.*;
 import java.awt.*;
-
 /**
  * @author nikelin
  * @date 27/04/11

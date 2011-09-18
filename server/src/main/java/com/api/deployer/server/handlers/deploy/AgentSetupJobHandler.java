@@ -1,22 +1,22 @@
 package com.api.deployer.server.handlers.deploy;
 
-import com.api.commons.XMLHelper;
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.config.IWritableConfig;
-import com.api.commons.config.XMLConfig;
-import com.api.commons.net.auth.AuthenticatorException;
-import com.api.commons.net.auth.impl.SimpleCredentials;
-import com.api.commons.net.io.IInteractorsFactory;
-import com.api.commons.net.io.INetworkInteractor;
-import com.api.commons.net.io.NetworkInteractionException;
-import com.api.commons.net.io.NetworkNode;
 import com.api.deployer.jobs.deploy.AgentSetupJob;
-import com.api.deployer.jobs.handlers.AbstractAwareJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
-import com.api.deployer.jobs.result.IJobResult;
-import com.api.deployer.jobs.result.JobResult;
 import com.api.deployer.system.ISystemFacade;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.jobs.result.JobResult;
+import com.redshape.io.IInteractorsFactory;
+import com.redshape.io.INetworkInteractor;
+import com.redshape.io.NetworkInteractionException;
+import com.redshape.io.NetworkNode;
+import com.redshape.io.net.auth.AuthenticatorException;
+import com.redshape.io.net.auth.impl.SimpleCredentials;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.config.IWritableConfig;
+import com.redshape.utils.config.XMLConfig;
+import com.redshape.utils.helpers.XMLHelper;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.ConnectionException;
 import net.schmizz.sshj.connection.channel.direct.Session;
@@ -35,17 +35,22 @@ import java.util.UUID;
  * @date 27/04/11
  * @package com.api.deployer.server.handlers.deploy
  */
-public class AgentSetupJobHandler extends AbstractAwareJobHandler<AgentSetupJob, IJobResult> {
+public class AgentSetupJobHandler extends AbstractJobHandler<AgentSetupJob, IJobResult> {
+	private ISystemFacade facade;
 
     public AgentSetupJobHandler() {
         this(null);
     }
 
     public AgentSetupJobHandler( ISystemFacade facade ) {
-        super(facade);
+        this.facade = facade;
     }
 
-    @Override
+	public ISystemFacade getFacade() {
+		return facade;
+	}
+
+	@Override
     protected IJobResult createJobResult(UUID jobId) {
         return new JobResult(jobId);
     }
@@ -93,7 +98,7 @@ public class AgentSetupJobHandler extends AbstractAwareJobHandler<AgentSetupJob,
 
             this.startRemoteAgent( path, job, client );
 
-            return this.createJobResult( job.getId() );
+            return this.createJobResult( job.getJobId() );
         } catch ( UnknownHostException e ) {
             throw new HandlingException( "Specified workstation not reachable", e );
         } catch ( InstantiationException e ) {
@@ -188,10 +193,9 @@ public class AgentSetupJobHandler extends AbstractAwareJobHandler<AgentSetupJob,
 
     @Override
     public void cancel() throws HandlingException {
-        this.getSystem().getConsole().stopScripts(this);
+        this.getFacade().getConsole().stopScripts(this);
     }
 
-    @Override
     public Integer getProgress() throws HandlingException {
         throw new UnsupportedOperationException("Operation not implemented");
     }

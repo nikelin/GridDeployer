@@ -1,10 +1,10 @@
 package com.api.deployer.execution;
 
+import com.redshape.daemon.jobs.JobException;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.UUID;
-
-import com.api.deployer.jobs.JobException;
 
 public interface IJobsDispatcher extends Remote {
 	
@@ -31,7 +31,7 @@ public interface IJobsDispatcher extends Remote {
 	 * Method which provides client with ability to send job execution result
 	 * on dispatcher side.
 	 * 
-	 * @param job Execution result object which contains completed job ID and other job related data
+	 * @param jobId Execution result object which contains completed job ID and other job related data
 	 * @throws RemoteException
 	 */
 	public void complete( UUID agentId, UUID jobId ) throws RemoteException;

@@ -1,18 +1,16 @@
 package com.api.deployer.agent.handlers.configuration.routes;
 
-import com.api.deployer.backup.artifactory.filters.UUIDFilter;
 import com.api.deployer.jobs.configuration.network.routes.GetRoutesJob;
-import com.api.deployer.jobs.handlers.AbstractJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
-import com.api.deployer.jobs.result.IJobResult;
-import com.api.deployer.jobs.result.JobResult;
 import com.api.deployer.system.ISystemFacade;
 import com.api.deployer.system.devices.INetworkDevice;
 import com.api.deployer.system.devices.network.routes.INetworkDeviceRoute;
-import com.api.deployer.system.scanners.IDeviceScanner;
 import com.api.deployer.system.scanners.ScannerException;
 import com.api.deployer.system.scanners.filters.NetworkDeviceFilter;
 import com.api.deployer.system.scanners.filters.UUIDDeviceFilter;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.jobs.result.JobResult;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,12 +22,17 @@ import java.util.UUID;
  * @package com.api.deployer.agent.handlers.configuration.routes
  */
 public class GetRoutesJobHandler extends AbstractJobHandler<GetRoutesJob, IJobResult> {
+	private ISystemFacade facade;
 
     public GetRoutesJobHandler(ISystemFacade facade) {
-        super(facade);
+       	this.facade = facade;
     }
 
-    @Override
+	public ISystemFacade getFacade() {
+		return facade;
+	}
+
+	@Override
     protected IJobResult createJobResult(UUID jobId) {
         return new JobResult( jobId );
     }
@@ -37,14 +40,18 @@ public class GetRoutesJobHandler extends AbstractJobHandler<GetRoutesJob, IJobRe
     @Override
     public IJobResult handle(GetRoutesJob job) throws HandlingException {
         try {
-            INetworkDevice device = (INetworkDevice) this.getSystem().getDevice( new NetworkDeviceFilter( new UUIDDeviceFilter( job.getId() ) ) );
+            INetworkDevice device = (INetworkDevice) this.getFacade().getDevice(
+				new NetworkDeviceFilter(
+					new UUIDDeviceFilter( job.getJobId() )
+				)
+			);
 
             Collection<INetworkDeviceRoute> routes = new HashSet<INetworkDeviceRoute>();
             if ( device.getUUID().equals( job.getDevice().getUUID() ) ) {
                 routes.addAll( device.getRoutes() );
             }
 
-            IJobResult result = this.createJobResult( job.getId() );
+            IJobResult result = this.createJobResult( job.getJobId() );
             result.setAttribute( GetRoutesJob.Attributes.Result, routes );
             return result;
         } catch ( ScannerException e ) {
@@ -57,7 +64,6 @@ public class GetRoutesJobHandler extends AbstractJobHandler<GetRoutesJob, IJobRe
         throw new UnsupportedOperationException("Operation cancellation not supported on current job type");
     }
 
-    @Override
     public Integer getProgress() throws HandlingException {
         return 0;
     }

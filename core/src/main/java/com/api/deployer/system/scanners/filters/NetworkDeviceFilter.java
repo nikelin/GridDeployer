@@ -1,8 +1,8 @@
 package com.api.deployer.system.scanners.filters;
 
-import com.api.commons.IFilter;
 import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.devices.INetworkDevice;
+import com.redshape.utils.IFilter;
 
 /**
  * @author nikelin

@@ -1,9 +1,9 @@
 package com.api.deployer.jobs.system;
 
-import com.api.deployer.jobs.AbstractJob;
-import com.api.deployer.jobs.result.JobResultAttribute;
 import com.redshape.bindings.annotations.Bindable;
 import com.redshape.bindings.annotations.BindableAttributes;
+import com.redshape.daemon.jobs.AbstractJob;
+import com.redshape.daemon.jobs.result.JobResultAttribute;
 
 import java.util.UUID;
 

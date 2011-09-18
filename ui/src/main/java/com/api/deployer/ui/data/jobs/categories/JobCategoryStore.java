@@ -1,7 +1,7 @@
 package com.api.deployer.ui.data.jobs.categories;
 
-import com.api.deployer.jobs.IJob;
 import com.api.deployer.ui.data.jobs.Job;
+import com.redshape.daemon.jobs.IJob;
 import com.redshape.ui.data.stores.ListStore;
 
 /**

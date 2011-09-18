@@ -1,16 +1,16 @@
 package com.api.deployer.backup;
 
+import com.api.deployer.backup.result.IBackupResult;
+import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.IDevice;
+import com.api.deployer.system.devices.storage.IStorageDevicePartition;
+import com.api.deployer.system.devices.storage.StorageFilesystem;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
 
-import com.api.deployer.backup.result.IBackupResult;
-import com.api.deployer.system.devices.IDevice;
-import com.api.deployer.system.devices.storage.IStorageDevicePartition;
-import com.api.deployer.system.devices.storage.StorageFilesystem;
-import com.api.deployer.system.ISystemFacade;
-
-public abstract class AbstractBackupEngine<T extends IBackupable, V extends IBackupResult> 
+public abstract class AbstractBackupEngine<T extends IBackupable, V extends IBackupResult>
 									implements IBackupEngine<T, V> {
 	private ISystemFacade system;
 	private boolean silentMode;

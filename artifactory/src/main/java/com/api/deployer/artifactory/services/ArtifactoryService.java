@@ -1,7 +1,5 @@
 package com.api.deployer.artifactory.services;
 
-import com.api.commons.IFilter;
-
 import com.api.deployer.backup.artifactory.ArtifactoryVersion;
 import com.api.deployer.backup.artifactory.IArtifactoryFacade;
 import com.api.deployer.backup.artifactory.ReaderException;
@@ -10,10 +8,10 @@ import com.api.deployer.backup.artifactory.artifacts.IArtifact;
 import com.api.deployer.backup.artifactory.filters.UUIDFilter;
 import com.api.deployer.backup.artifactory.index.IArtifactoryIndex;
 import com.api.deployer.backup.artifactory.index.IndexException;
-
 import com.api.deployer.backup.artifactory.index.LockedException;
 import com.api.deployer.execution.services.IArtifactoryService;
 import com.api.deployer.io.transport.IDestination;
+import com.redshape.utils.IFilter;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 

@@ -1,16 +1,16 @@
 package com.api.deployer.system;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.UUID;
-
-import com.api.commons.IFilter;
 import com.api.deployer.system.configurers.IPartitionsEditor;
 import com.api.deployer.system.configurers.network.INetworkConfigurer;
+import com.api.deployer.system.console.IConsole;
 import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.devices.storage.IStorageDriveDevice;
 import com.api.deployer.system.scanners.ScannerException;
-import com.api.deployer.system.console.IConsole;
+import com.redshape.utils.IFilter;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * Interface for system interaction facade

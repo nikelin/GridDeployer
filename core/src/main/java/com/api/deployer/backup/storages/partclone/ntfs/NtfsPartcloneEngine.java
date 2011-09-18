@@ -1,11 +1,11 @@
 package com.api.deployer.backup.storages.partclone.ntfs;
 
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
 import com.api.deployer.backup.storages.partclone.AbstractPartcloneEngine;
-import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
 
 public class NtfsPartcloneEngine extends AbstractPartcloneEngine {
 	

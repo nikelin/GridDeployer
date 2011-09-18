@@ -83,12 +83,6 @@
 			<groupId>com.api.deployer</groupId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<artifactId>daemon</artifactId>
-			<groupId>com.api</groupId>
-			<version>2.0-SNAPSHOT</version>
-		</dependency>
-
 	</dependencies>
 
 </project>

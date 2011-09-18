@@ -1,12 +1,12 @@
 package com.api.deployer.jobs.configuration.network;
 
-import com.api.commons.StringUtils;
-import com.api.deployer.jobs.AbstractJob;
 import com.api.deployer.system.devices.INetworkDevice;
 import com.redshape.bindings.annotations.Bindable;
 import com.redshape.bindings.annotations.BindableWriter;
 import com.redshape.bindings.annotations.IgnoreViolations;
 import com.redshape.bindings.types.BindableType;
+import com.redshape.daemon.jobs.AbstractJob;
+import com.redshape.utils.StringUtils;
 import com.redshape.validators.annotations.NotNull;
 
 import java.net.InetAddress;

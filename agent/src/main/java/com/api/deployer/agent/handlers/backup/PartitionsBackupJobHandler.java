@@ -21,14 +21,12 @@ import com.api.deployer.io.transport.mounters.MountException;
 import com.api.deployer.jobs.backup.IPartitionsBackupJob;
 import com.api.deployer.jobs.backup.result.BackupJobResult;
 import com.api.deployer.jobs.backup.result.IBackupJobResult;
-import com.api.deployer.jobs.handlers.AbstractAwareJobHandler;
-import com.api.deployer.jobs.handlers.AbstractJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
 import com.api.deployer.system.ISystemFacade;
-import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.system.devices.storage.IStorageDriveDevice;
 import com.api.deployer.system.devices.storage.PartitionFlag;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
 
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -39,15 +37,20 @@ import java.util.UUID;
  * @date 26/04/11
  * @package com.api.deployer.agent.handlers.backup
  */
-public class PartitionsBackupJobHandler extends AbstractAwareJobHandler<IPartitionsBackupJob, IBackupJobResult> {
+public class PartitionsBackupJobHandler extends AbstractJobHandler<IPartitionsBackupJob, IBackupJobResult> {
     private IBackupEngine<IStorageDriveDevice, IDriveBackupResult> engine;
     private Object lock = new Object();
+	private ISystemFacade facade;
 
     public PartitionsBackupJobHandler( ISystemFacade facade ) {
-        super(facade);
+        this.facade = facade;
     }
 
-    @Override
+	public ISystemFacade getFacade() {
+		return facade;
+	}
+
+	@Override
     protected IBackupJobResult createJobResult(UUID jobId) {
         return new BackupJobResult( jobId );
     }
@@ -68,7 +71,7 @@ public class PartitionsBackupJobHandler extends AbstractAwareJobHandler<IPartiti
     public IBackupJobResult handle(IPartitionsBackupJob job) throws HandlingException {
         synchronized (lock) {
             try {
-                IArtifactoryService artifactoryService = this.getManagerContext().getArtifactoryService();
+                IArtifactoryService artifactoryService = this.getContext().getBean(IArtifactoryService.class);
                 if ( artifactoryService == null ) {
                     throw new HandlingException("Artifactory not binded");
                 }
@@ -100,7 +103,7 @@ public class PartitionsBackupJobHandler extends AbstractAwareJobHandler<IPartiti
                     }
                 }
 
-                IBackupJobResult<IBackupResult> result = this.createJobResult( job.getId() );
+                IBackupJobResult<IBackupResult> result = this.createJobResult( job.getJobId() );
 
                 IDriveBackupResult engineResult = this.engine.save(
                     device, mounter.mount( destination )
@@ -174,7 +177,6 @@ public class PartitionsBackupJobHandler extends AbstractAwareJobHandler<IPartiti
         }
     }
 
-    @Override
     public Integer getProgress() throws HandlingException {
         return 0;
     }

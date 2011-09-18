@@ -1,8 +1,8 @@
 package com.api.deployer.ui.data.jobs.results.loaders;
 
-import com.api.deployer.jobs.result.IJobResult;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.data.jobs.results.JobResult;
+import com.redshape.daemon.jobs.result.IJobResult;
 import com.redshape.ui.data.loaders.AbstractDataLoader;
 import com.redshape.ui.data.loaders.LoaderException;
 import com.redshape.ui.utils.UIRegistry;
@@ -10,7 +10,6 @@ import com.redshape.ui.utils.UIRegistry;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author nikelin
@@ -31,7 +30,7 @@ public class JobResultsLoader extends AbstractDataLoader<JobResult> {
             Collection<IJobResult> results = this.getConnector().getExecutionResults();
             for ( IJobResult jobResult : results ) {
                 JobResult resultData = new JobResult();
-                resultData.setId( jobResult.getId() );
+                resultData.setId( jobResult.getJobId() );
                 resultData.setJobId( jobResult.getJobId() );
                 resultData.setAttributes( jobResult.<Object>getAttributes() );
                 resultData.setCompletionDate( jobResult.getCompletionDate() );

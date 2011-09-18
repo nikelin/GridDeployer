@@ -1,5 +1,15 @@
 package com.api.deployer.system.linux.scanners;
 
+import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.INetworkDevice;
+import com.api.deployer.system.devices.network.NetworkDevice;
+import com.api.deployer.system.devices.network.NetworkDeviceType;
+import com.api.deployer.system.devices.network.routes.NetworkDeviceRoute;
+import com.api.deployer.system.scanners.IDeviceScanner;
+import com.api.deployer.system.scanners.ScannerException;
+import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.utils.StringUtils;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -8,17 +18,6 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.api.commons.StringUtils;
-import com.api.deployer.system.devices.INetworkDevice;
-import com.api.deployer.system.devices.network.NetworkDevice;
-import com.api.deployer.system.devices.network.NetworkDeviceType;
-import com.api.deployer.system.devices.network.routes.INetworkDeviceRoute;
-import com.api.deployer.system.devices.network.routes.NetworkDeviceRoute;
-import com.api.deployer.system.scanners.IDeviceScanner;
-import com.api.deployer.system.ISystemFacade;
-import com.api.deployer.system.scanners.ScannerException;
-import com.api.deployer.system.scripts.IScriptExecutor;
 
 /**
  * Created by IntelliJ IDEA.
@@ -99,7 +98,7 @@ public class LinuxNetworkScanner implements IDeviceScanner<INetworkDevice> {
                 if ( matcher.find() ) {
                     device.setBroadcast( InetAddress.getByAddress(
                         StringUtils.stringToIP(
-                            partition.substring( matcher.start(1), matcher.end(1) ) )
+								partition.substring(matcher.start(1), matcher.end(1)))
 
                     ) );
                 }

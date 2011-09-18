@@ -1,8 +1,5 @@
 package com.api.deployer.ui.components.scheduler.windows;
 
-import com.api.deployer.jobs.activation.ActivationAttribute;
-import com.api.deployer.jobs.activation.JobActivationProfile;
-import com.api.deployer.jobs.activation.JobActivationType;
 import com.api.deployer.ui.components.scheduler.SchedulerComponent;
 import com.api.deployer.ui.components.scheduler.panels.JobsTree;
 import com.api.deployer.ui.data.jobs.Job;
@@ -11,6 +8,9 @@ import com.api.deployer.ui.data.jobs.configurations.JobConfiguration;
 import com.api.deployer.ui.data.jobs.configurations.JobConfigurationsStore;
 import com.api.deployer.ui.data.workstations.StationsStore;
 import com.api.deployer.ui.data.workstations.groups.StationGroupsStore;
+import com.redshape.daemon.jobs.activation.ActivationAttribute;
+import com.redshape.daemon.jobs.activation.JobActivationProfile;
+import com.redshape.daemon.jobs.activation.JobActivationType;
 import com.redshape.ui.Dispatcher;
 import com.redshape.ui.application.UnhandledUIException;
 import com.redshape.ui.application.events.AppEvent;
@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Vector;
+
 
 /**
  * @author root
@@ -141,7 +142,7 @@ public class ConfigurationWindow extends JFrame {
 		selector.setRenderer( new ListCellRenderer() {
 			@Override
 			public Component getListCellRendererComponent(JList jList, Object o, int i, boolean b, boolean b1) {
-				return new JLabel( ( (JobActivationType) o ).type() );
+				return new JLabel( ( (JobActivationType ) o ).type() );
 			}
 		});
 

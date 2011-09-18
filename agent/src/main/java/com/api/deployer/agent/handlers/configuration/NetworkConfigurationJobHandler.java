@@ -1,14 +1,14 @@
 package com.api.deployer.agent.handlers.configuration;
 
 import com.api.deployer.jobs.configuration.network.NetworkConfigurationJob;
-import com.api.deployer.jobs.handlers.AbstractJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
-import com.api.deployer.jobs.result.IJobResult;
-import com.api.deployer.jobs.result.JobResult;
 import com.api.deployer.system.ISystemFacade;
 import com.api.deployer.system.configurers.ConfigurerException;
 import com.api.deployer.system.configurers.network.INetworkConfigurer;
 import com.api.deployer.system.devices.INetworkDevice;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.jobs.result.JobResult;
 
 import java.util.UUID;
 
@@ -17,13 +17,19 @@ import java.util.UUID;
  * @date 25/04/11
  * @package com.api.deployer.agent.handlers.configuration
  */
-public class NetworkConfigurationJobHandler extends AbstractJobHandler<NetworkConfigurationJob, IJobResult> {
+public class NetworkConfigurationJobHandler extends AbstractJobHandler<NetworkConfigurationJob,
+																	   IJobResult> {
+	private ISystemFacade facade;
 
     public NetworkConfigurationJobHandler(ISystemFacade facade) {
-        super(facade);
+        this.facade = facade;
     }
 
-    @Override
+	public ISystemFacade getFacade() {
+		return facade;
+	}
+
+	@Override
     protected IJobResult createJobResult(UUID jobId) {
         return new JobResult(jobId);
     }
@@ -35,7 +41,7 @@ public class NetworkConfigurationJobHandler extends AbstractJobHandler<NetworkCo
             throw new HandlingException("Target device must not be null!");
         }
 
-        INetworkConfigurer configurer = this.getSystem().getNetworkConfigurer();
+        INetworkConfigurer configurer = this.getFacade().getNetworkConfigurer();
 
         try {
             configurer.configure( job.getDevice(),
@@ -45,7 +51,7 @@ public class NetworkConfigurationJobHandler extends AbstractJobHandler<NetworkCo
             throw new HandlingException("Unable to configure specified network device", e );
         }
 
-        return this.createJobResult( job.getId() );
+        return this.createJobResult( job.getJobId() );
     }
 
     @Override
@@ -53,7 +59,6 @@ public class NetworkConfigurationJobHandler extends AbstractJobHandler<NetworkCo
         throw new UnsupportedOperationException("Operation not supported!");
     }
 
-    @Override
     // TODO: reduce
     public Integer getProgress() throws HandlingException {
         return 0;

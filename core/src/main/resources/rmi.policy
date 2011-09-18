@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 grant {
     permission java.security.AllPermission;
+=======
+grant {
+    permission java.security.AllPermission;
+>>>>>>> 96adddcf4b9dc0d1d4b8d47890186ddee7227864
 };

@@ -1,7 +1,7 @@
 package com.api.deployer.backup.artifactory.artifacts;
 
-import com.api.commons.config.IWritableConfig;
 import com.api.deployer.backup.artifactory.ArtifactoryVersion;
+import com.redshape.utils.config.IWritableConfig;
 
 public interface IArtifactBuilder {
 	

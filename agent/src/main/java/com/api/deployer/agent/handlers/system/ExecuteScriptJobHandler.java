@@ -1,12 +1,12 @@
 package com.api.deployer.agent.handlers.system;
 
-import com.api.deployer.jobs.handlers.AbstractJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
-import com.api.deployer.jobs.result.IJobResult;
-import com.api.deployer.jobs.result.JobResult;
 import com.api.deployer.jobs.system.ExecuteScriptJob;
 import com.api.deployer.system.ISystemFacade;
 import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.jobs.result.JobResult;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -17,12 +17,17 @@ import java.util.UUID;
  * @package com.api.deployer.agent.handlers.system
  */
 public class ExecuteScriptJobHandler extends AbstractJobHandler<ExecuteScriptJob, IJobResult> {
+	private ISystemFacade facade;
 
     public ExecuteScriptJobHandler( ISystemFacade facade ) {
-        super(facade);
+        this.facade = facade;
     }
 
-    @Override
+	public ISystemFacade getFacade() {
+		return facade;
+	}
+
+	@Override
     protected IJobResult createJobResult(UUID jobId) {
         return new JobResult( jobId );
     }
@@ -34,10 +39,10 @@ public class ExecuteScriptJobHandler extends AbstractJobHandler<ExecuteScriptJob
             throw new HandlingException();
         }
 
-        IScriptExecutor executor = this.getSystem().getConsole().createExecutor( job.getCommand() );
+        IScriptExecutor executor = this.getFacade().getConsole().createExecutor( job.getCommand() );
 
         try {
-            IJobResult result = this.createJobResult(job.getId());;
+            IJobResult result = this.createJobResult(job.getJobId());;
             result.setAttribute( ExecuteScriptJob.Attributes.Result, executor.execute() );
 
             return result;
@@ -48,10 +53,9 @@ public class ExecuteScriptJobHandler extends AbstractJobHandler<ExecuteScriptJob
 
     @Override
     public void cancel() throws HandlingException {
-        this.getSystem().getConsole().stopScripts(this);
+        this.getFacade().getConsole().stopScripts(this);
     }
 
-    @Override
     public Integer getProgress() throws HandlingException {
         return 0;
     }

@@ -1,56 +1,48 @@
 package com.api.deployer.server.services;
 
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URI;
-
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-
-import java.util.*;
-import java.util.concurrent.*;
-
-import com.api.deployer.io.transport.IDestination;
-import com.api.deployer.jobs.JobScope;
-import com.api.deployer.jobs.JobState;
-import com.api.deployer.jobs.activation.ActivationAttribute;
-import com.api.deployer.jobs.activation.JobActivationProfile;
-import com.api.deployer.jobs.manager.IJobsManager;
-import com.api.deployer.notifications.INotification;
-import com.api.deployer.notifications.ITransportFacade;
-
-import com.api.deployer.notifications.Notification;
-import com.api.deployer.notifications.NotificationType;
-import org.apache.log4j.Logger;
-
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
-
-import org.quartz.impl.matchers.GroupMatcher;
-import org.springframework.context.ApplicationContext;
-
-import com.api.commons.IFilter;
-import com.api.commons.events.AbstractRemoteEventDispatcher;
-
-import com.api.daemon.IRemoteService;
-
-import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.execution.IExecutorDescriptor;
 import com.api.deployer.execution.services.IDeployAgentService;
 import com.api.deployer.execution.services.IDeployServerService;
-
-import com.api.deployer.jobs.IJob;
-import com.api.deployer.jobs.JobException;
-import com.api.deployer.jobs.result.IJobResult;
-import com.api.deployer.jobs.result.JobResult;
+import com.api.deployer.io.transport.IDestination;
+import com.api.deployer.jobs.JobScope;
+import com.api.deployer.notifications.INotification;
+import com.api.deployer.notifications.ITransportFacade;
+import com.api.deployer.notifications.Notification;
+import com.api.deployer.notifications.NotificationType;
 import com.api.deployer.services.DeployServiceEvent;
+import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.processes.ISystemProcess;
+import com.redshape.daemon.IRemoteService;
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.JobException;
+import com.redshape.daemon.jobs.JobStatus;
+import com.redshape.daemon.jobs.activation.ActivationAttribute;
+import com.redshape.daemon.jobs.activation.JobActivationProfile;
+import com.redshape.daemon.jobs.managers.IJobsManager;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.jobs.result.JobResult;
+import com.redshape.utils.IFilter;
+import com.redshape.utils.events.AbstractRemoteEventDispatcher;
+import org.apache.log4j.Logger;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.GroupMatcher;
+import org.springframework.context.ApplicationContext;
 
-import static org.quartz.TriggerBuilder.*;
-import static org.quartz.SimpleScheduleBuilder.*;
-import static org.quartz.DateBuilder.*;
-import static org.quartz.JobBuilder.*;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.*;
+import java.util.concurrent.*;
+
+import static org.quartz.DateBuilder.IntervalUnit;
+import static org.quartz.DateBuilder.futureDate;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
+import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * Deploy server operational handler implementation
@@ -59,7 +51,8 @@ import static org.quartz.JobBuilder.*;
  *
  * @author nikelin
  */
-public class DeployServerService extends AbstractRemoteEventDispatcher implements IDeployServerService, IRemoteService,Serializable {
+public class DeployServerService extends AbstractRemoteEventDispatcher
+								implements IDeployServerService, IRemoteService,Serializable {
 	private static final long serialVersionUID = -9187503332296361040L;
 	private static final Logger log = Logger.getLogger( DeployServerService.class );
 
@@ -188,8 +181,8 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
 	}
 
 	@Override
-	public Integer getProgress( UUID job ) throws RemoteException {
-		return this.executorConnections.get( this.jobs.get(job).getAgentId() )
+	public Integer getProgress( UUID agentId, UUID job ) throws RemoteException {
+		return this.executorConnections.get( agentId )
 									   .getJobProgress(job);
 	}
 
@@ -224,30 +217,30 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
 		return jobs;
 	}
 
-	protected void registerJob( IJob job ) throws RemoteException {
-		job.setId( this.generateId() );
+	protected void registerJob( UUID agentId, IJob job ) throws RemoteException {
+		job.setJobId(this.generateId());
 		
-		this.jobs.put( job.getId(), job );
+		this.jobs.put( job.getJobId(), job );
 		
-		if ( this.executorJobs.get( job.getAgentId() ) == null ) {
-			this.executorJobs.put( job.getAgentId(), new HashSet<UUID>() );
+		if ( this.executorJobs.get( agentId ) == null ) {
+			this.executorJobs.put( agentId, new HashSet<UUID>() );
 		}
 		
-		this.executorJobs.get( job.getAgentId() ).add( job.getId() );
+		this.executorJobs.get( agentId ).add( job.getJobId() );
 	}
 	
 	protected ExecutorService getThreadExecutor() {
 		return this.threadExecutor;
 	}
 	
-	protected void unregisterJob( IJob job ) {
-		this.jobs.remove( job.getId() );
-		this.executorJobs.get( job.getAgentId() ).remove( job.getId() );
+	protected void unregisterJob( UUID agentId, IJob job ) {
+		this.jobs.remove( job.getJobId() );
+		this.executorJobs.get( agentId ).remove( job.getJobId() );
 	}
 
     protected UUID registerServerJob( IJob job ) throws RemoteException {
         UUID id = UUID.randomUUID();
-        job.setId(id);
+        job.setJobId(id);
         this.serverJobs.put( id, job );
         return id;
     }
@@ -285,7 +278,7 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
     @Override
     public void pauseJob(UUID job) throws RemoteException {
         try {
-            this.jobs.get( job ).setState( JobState.PAUSED );
+            this.jobs.get( job ).setState( JobStatus.WAITING );
             this.scheduler.pauseJob( new JobKey( job.toString(), JOBS_GROUP ) );
         } catch ( SchedulerException e ) {
             log.error( e.getMessage(), e );
@@ -296,7 +289,7 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
     @Override
     public void resumeJob(UUID job) throws RemoteException {
         try {
-            this.jobs.get(job).setState( JobState.WAITING );
+            this.jobs.get(job).setState( JobStatus.WAITING );
             this.scheduler.resumeJob(new JobKey(job.toString(), JOBS_GROUP));
         } catch ( SchedulerException e ) {
             log.error( e.getMessage(), e );
@@ -365,10 +358,10 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
         results.add( result );
     }
 
-    protected IJobResult executeAgentJob( IJob job ) throws RemoteException {
-        this.registerJob(job);
+    protected IJobResult executeAgentJob( UUID agentId, IJob job ) throws RemoteException {
+        this.registerJob(agentId, job);
 
-        this.executeJob(new JobExecutionThread(this.executorConnections.get(job.getAgentId()), job));
+        this.executeJob(new JobExecutionThread(this.executorConnections.get(agentId), agentId, job));
 
         return this.createJobResult( job );
     }
@@ -394,13 +387,13 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
 
     @Override
     // TODO: add scope processor selection strategy instead of hard-coded selection
-    public IJobResult executeJob( IJob job ) throws RemoteException {
+    public IJobResult executeJob( JobScope scope, UUID agentId, IJob job ) throws RemoteException {
         IJobResult result;
-        if ( job.getScope().equals( JobScope.SERVER ) ) {
+        if (scope.equals(JobScope.SERVER) ) {
             result = this.executeServerJob( job );
-        } else if ( job.getScope().equals( JobScope.AGENT)) {
-            result = this.executeAgentJob( job );
-        } else if ( job.getScope().equals( JobScope.ARTIFACTORY ) ) {
+        } else if ( scope.equals(JobScope.AGENT)) {
+            result = this.executeAgentJob( agentId, job );
+        } else if ( scope.equals(JobScope.ARTIFACTORY) ) {
             result = this.executeArtifactoryJob( job );
         } else {
             throw new RemoteException("Unknown job scope");
@@ -411,17 +404,17 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
         this.sendNotification( new Notification(
                 NotificationType.INFO,
                 "Job execution completed!",
-                "Job with ID#" + job.getId().toString() + " has been completed successfuly!" )
+                "Job with ID#" + job.getJobId().toString() + " has been completed successfuly!" )
         );
 
         return result;
     }
 
 	@Override
-	public Collection<IJobResult> executeJobs(Collection<IJob> jobs ) throws RemoteException {
+	public Collection<IJobResult> executeJobs( JobScope scope, UUID agentId, Collection<IJob> jobs ) throws RemoteException {
 		Collection<IJobResult> results = new HashSet<IJobResult>();
 		for ( IJob job : jobs ) {
-			results.add( this.executeJob(job) );
+			results.add( this.executeJob(scope, agentId, job) );
 		}
 
 		return results;
@@ -457,10 +450,10 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
     }
 
     @Override
-	public UUID scheduleJob( IJob job, JobActivationProfile profile ) throws RemoteException {
-        this.registerJob( job );
+	public UUID scheduleJob( UUID agentId, IJob job, JobActivationProfile profile ) throws RemoteException {
+        this.registerJob( agentId, job );
 
-        job.setState( JobState.WAITING );
+        job.setState( JobStatus.WAITING );
 
         try {
             JobDataMap map = new JobDataMap();
@@ -477,7 +470,7 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
                     this.scheduler.scheduleJob(
                             newJob(JobExecutionBroker.class)
                                     .usingJobData(map)
-                                    .withIdentity(job.getId().toString(), JOBS_GROUP )
+                                    .withIdentity(job.getJobId().toString(), JOBS_GROUP )
                                     .build(),
                             newTrigger()
                                     .withSchedule(
@@ -497,7 +490,7 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
                     this.scheduler.scheduleJob(
                             newJob(JobExecutionBroker.class)
                                     .usingJobData(map)
-                                    .withIdentity(job.getId().toString(), JOBS_GROUP)
+                                    .withIdentity(job.getJobId().toString(), JOBS_GROUP)
                                     .build(),
                             newTrigger()
                                     .startAt(date)
@@ -521,7 +514,7 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
 
                     this.scheduler.scheduleJob(
                         newJob(JobExecutionBroker.class)
-                            .withIdentity(job.getId().toString(), JOBS_GROUP )
+                            .withIdentity(job.getJobId().toString(), JOBS_GROUP )
                             .usingJobData(map)
                                 .build(),
                         newTrigger()
@@ -533,18 +526,18 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
                     throw new UnsupportedOperationException("Specified scheduling method not supported");
             }
 
-            return job.getId();
+            return job.getJobId();
         } catch ( Throwable e ) {
             throw new RemoteException( e.getMessage() );
         }
 	}
 
     @Override
-    public Collection<UUID> scheduleJobs( Collection<IJob> jobs, JobActivationProfile profile ) throws RemoteException {
+    public Collection<UUID> scheduleJobs( UUID agentId, Collection<IJob> jobs, JobActivationProfile profile ) throws RemoteException {
         Collection<UUID> descriptors = new HashSet<UUID>();
 
         for ( IJob job : jobs ) {
-            descriptors.add( this.scheduleJob( job, profile ) );
+            descriptors.add( this.scheduleJob( agentId, job, profile ) );
         }
 
         return descriptors;
@@ -599,7 +592,7 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
 	}
 	
 	protected IJobResult createJobResult( final IJob job ) {
-		return new JobResult(job.getId());
+		return new JobResult(job.getJobId());
 	}
 	
 	@Override
@@ -670,9 +663,11 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
 
 	public class JobExecutionThread implements Callable<IJobResult> {
 		private IDeployAgentService agent;
+		private UUID agentId;
 		private IJob job;
 		
-		public JobExecutionThread( IDeployAgentService agent, IJob job ) {
+		public JobExecutionThread( IDeployAgentService agent, UUID agentId, IJob job ) {
+			this.agentId = agentId;
 			this.agent = agent;
 			this.job = job;
 		}
@@ -684,10 +679,10 @@ public class DeployServerService extends AbstractRemoteEventDispatcher implement
 					return this.agent.accept( this.job );
 				} catch ( RemoteException e  ) {
 					DeployServerService.this.fail( 
-						this.job.getAgentId(), 
-						this.job.getId(), 
+						this.agentId,
+						this.job.getJobId(),
 						new JobException(
-							"Job execution failed by agent: " + this.job.getAgentId(), 
+							"Job execution failed by agent: " + agentId,
 							e ) );
                     return null;
 				}

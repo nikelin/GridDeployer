@@ -1,7 +1,8 @@
 package com.api.deployer.services;
 
+import com.redshape.utils.events.AbstractEvent;
+
 import java.util.UUID;
-import com.api.commons.events.AbstractEvent;
 
 public class DeployServiceEvent extends AbstractEvent {
 		private static final long serialVersionUID = -274130142679034582L;

@@ -8,8 +8,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <bean id="evaluator" scope="singleton"
-          class="com.api.deployer.expressions.evaluation.ExpressionEvaluator">
-        <constructor-arg><ref bean="nativeResourcesLoader"/></constructor-arg>
+          class="com.redshape.ascript.evaluation.ExpressionEvaluator">
+        <constructor-arg><ref bean="resourcesLoader"/></constructor-arg>
         <property name="includes">
             <value>src/main/resources/aps/init.aps</value>
         </property>

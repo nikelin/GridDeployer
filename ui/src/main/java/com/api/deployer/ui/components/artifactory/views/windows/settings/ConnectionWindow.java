@@ -1,5 +1,7 @@
 package com.api.deployer.ui.components.artifactory.views.windows.settings;
 
+import javax.swing.*;
+
 import com.api.deployer.ui.components.artifactory.ArtifactoryComponent;
 import com.api.deployer.ui.connector.ArtifactoryConnector;
 import com.api.deployer.ui.connector.DeployAgentConnector;

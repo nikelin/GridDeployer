@@ -1,10 +1,5 @@
 package com.api.deployer.backup.artifactory.artifacts.writers;
 
-import java.util.UUID;
-
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.config.IWritableConfig;
 import com.api.deployer.backup.artifactory.WriterException;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
 import com.api.deployer.backup.compression.CompressionLevel;
@@ -13,6 +8,11 @@ import com.api.deployer.backup.diff.DiffMethod;
 import com.api.deployer.system.devices.storage.PartitionFlag;
 import com.api.deployer.system.devices.storage.PartitionType;
 import com.api.deployer.system.devices.storage.StorageFilesystem;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.config.IWritableConfig;
+
+import java.util.UUID;
 
 public class PartitionArtifactWriter extends AbstractArtifactWriter implements IPartitionArtifactWriter {
 

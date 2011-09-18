@@ -1,11 +1,10 @@
 package com.api.deployer.jobs.configuration.network.routes;
 
-import com.api.deployer.jobs.AbstractJob;
-import com.api.deployer.jobs.result.JobResultAttribute;
 import com.api.deployer.system.devices.INetworkDevice;
 import com.redshape.bindings.annotations.Bindable;
+import com.redshape.daemon.jobs.AbstractJob;
+import com.redshape.daemon.jobs.result.JobResultAttribute;
 
-import java.net.InetAddress;
 import java.util.UUID;
 
 /**

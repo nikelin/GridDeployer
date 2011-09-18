@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:p="http://www.springframework.org/schema/p"
@@ -235,3 +236,242 @@
 	</bean>
 
 </beans>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.api.deployer"/>
+	
+	<import resource="xml-config.xml"/>
+
+    <bean id="hasher" class="com.api.commons.hashers.MD5" scope="singleton"/>
+
+	<bean id="consoleConfig" class="com.api.commons.config.XMLConfig">
+		<constructor-arg><ref bean="xmlHelper"/></constructor-arg>
+		<constructor-arg><value>linuxMockData.xml</value></constructor-arg>
+	</bean>
+
+	<bean scope="singleton" id="console" 
+		class="com.api.deployer.system.scanners.mock.MockConsole">
+		<constructor-arg><ref bean="consoleConfig"/></constructor-arg>
+	</bean>
+	
+	<bean scope="singleton" id="linuxFSScanner"
+		class="com.api.deployer.system.linux.scanners.LinuxFSScanner"/>
+
+    <bean scope="singleton" id="linuxNetworkScanner"
+        class="com.api.deployer.system.linux.scanners.LinuxNetworkScanner"/>
+
+	<bean scope="singleton" id="systemFacade" 
+		class="com.api.deployer.system.linux.SystemFacade">
+		<constructor-arg><ref bean="console"/></constructor-arg>
+		<property name="scanners">
+			<list>
+				<ref bean="linuxFSScanner"/>
+                <ref bean="linuxNetworkScanner"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Backup engines -->
+	
+	<bean scope="singleton" id="extfsPartcloneEngine" 
+		class="com.api.deployer.backup.storages.partclone.extfs.ExtfsPartcloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean scope="singleton" id="genericBackupEngine" 
+		class="com.api.deployer.backup.storages.generic.DDCloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean scope="singleton" id="swapCloneEngine" 
+		class="com.api.deployer.backup.storages.generic.SwapCloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean scope="singleton" id="ntfsPartcloneEngine" 
+		class="com.api.deployer.backup.storages.partclone.ntfs.NtfsPartcloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<!-- Filesystem types -->
+	<bean scope="singleton" id="ext2fs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.EXT2</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="ext3fs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.EXT3</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="ext4fs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.EXT4</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="ntfs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.NTFS</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="swapfs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.SWAP</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="genericfs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.GENERIC</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="backupFacade" class="com.api.deployer.backup.storages.StorageBackupFacade">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+		<property name="engines">
+			<map>
+				<entry>
+					<key><ref bean="ext2fs"/></key>
+					<ref bean="extfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="ext3fs"/></key>
+					<ref bean="extfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="ext4fs"/></key>
+					<ref bean="extfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="ntfs"/></key>
+					<ref bean="ntfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="swapfs"/></key>
+					<ref bean="swapCloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="genericfs"/></key>
+					<ref bean="genericBackupEngine"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean scope="singleton" id="driveBackupEngine"
+		class="com.api.deployer.backup.storages.drive.DriveBackupEngine">
+		<constructor-arg><ref bean="backupFacade"/></constructor-arg>
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<!-- Destinations mounters definition (ssh, local, etc.)-->
+	
+	<bean id="sshMounter" class="com.api.deployer.io.transport.ssh.mounters.SSHMounter">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean id="localMounter" class="com.api.deployer.io.transport.local.local.LocalMounter"/>
+	
+	<bean scope="singleton" id="destinationMountingFacade"
+		class="com.api.deployer.io.transport.mounters.DestinationMountingFacade">
+		
+		<property name="mounters">
+			<set>
+				<ref bean="sshMounter"/>
+				<ref bean="localMounter"/>
+			</set>
+		</property>
+	</bean>
+	
+	<bean scope="singleton" id="testRepositoryIndex" class="com.api.commons.config.XMLConfig">
+		<constructor-arg><ref bean="xmlHelper"/></constructor-arg>
+		<constructor-arg><value>testIndexMeta.xml</value></constructor-arg>
+	</bean>
+	
+	<!-- Natives loader initialization
+	<bean scope="singleton" class="com.api.deployer.system.NativesLoader">
+		<property name="natives">
+			<map>
+				<entry>
+					<key><value>com.api.deployer.scnners.linux.LinixFSScanner</value></key>
+					<value>devicescanner</value>
+				</entry>
+			</map>
+		</property>
+	</bean>-->
+	
+	<!-- Jobs handlers -->
+	
+	<bean scope="singleton" id="artifactoryIndexReader" 
+		  class="com.api.deployer.backup.artifactory.index.IndexReader"/>
+	
+	<bean scope="singleton" id="artifactoryIndexWriter" 
+			class="com.api.deployer.backup.artifactory.index.IndexWriter"/>
+	
+	<bean scope="singleton" id="artifactory" class="com.api.deployer.backup.artifactory.ArtifactoryFacade">
+		<property name="indexWriter">
+			<ref bean="artifactoryIndexWriter"/>
+		</property>
+		<property name="indexReader">
+			<ref bean="artifactoryIndexReader"/>
+		</property>
+		<property name="readers">
+			<map value-type="java.lang.Class">
+				<entry>
+					<key>
+						<bean factory-method="valueOf" class="com.api.deployer.backup.artifactory.artifacts.ArtifactType">
+							<constructor-arg><value>DRIVE</value></constructor-arg>
+						</bean>
+					</key>
+					<value>com.api.deployer.backup.artifactory.artifacts.readers.DriveArtifactReader</value>
+				</entry>
+				<entry>
+					<key>
+						<bean factory-method="valueOf" class="com.api.deployer.backup.artifactory.artifacts.ArtifactType">
+							<constructor-arg><value>PARTITION</value></constructor-arg>
+						</bean>
+					</key>
+					<value>com.api.deployer.backup.artifactory.artifacts.readers.PartitionArtifactReader</value>
+				</entry>
+			</map>
+		</property>
+		<property name="writers">
+			<map>
+				<entry>
+					<key>
+						<bean factory-method="valueOf" class="com.api.deployer.backup.artifactory.artifacts.ArtifactType">
+							<constructor-arg><value>DRIVE</value></constructor-arg>
+						</bean>
+					</key>
+					<value type="java.lang.Class">com.api.deployer.backup.artifactory.artifacts.writers.DriveArtifactWriter</value>
+				</entry>
+				<entry>
+					<key>
+						<bean factory-method="valueOf" class="com.api.deployer.backup.artifactory.artifacts.ArtifactType">
+							<constructor-arg><value>PARTITION</value></constructor-arg>
+						</bean>
+					</key>
+					<value type="java.lang.Class">com.api.deployer.backup.artifactory.artifacts.writers.PartitionArtifactWriter</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- Artifactory -->
+	<!-- Base artifactory location -->
+	<bean id="artifactoryDestination" class="com.api.deployer.io.transport.ssh.SSHDestination">
+		<property name="host"><value>localhost</value></property>
+		<property name="port"><value>21</value></property>
+		<property name="path"><value>/var/master-images</value></property>
+		<property name="user"><value>nikelin</value></property>
+		<property name="password"><value>nikelin1990</value></property>
+	</bean>
+
+</beans>
+>>>>>>> 96adddcf4b9dc0d1d4b8d47890186ddee7227864

@@ -1,9 +1,6 @@
 package com.api.deployer.ui.components.connector;
 
-import com.api.commons.events.IEventListener;
-import com.api.daemon.DaemonException;
-import com.api.daemon.IDaemonEvent;
-import com.api.daemon.events.ServiceBindedEvent;
+import com.api.deployer.jobs.JobScope;
 import com.api.deployer.jobs.system.IRebootJob;
 import com.api.deployer.jobs.system.IShutdownJob;
 import com.api.deployer.jobs.system.RebootJob;
@@ -14,6 +11,9 @@ import com.api.deployer.ui.components.system.windows.JobProgressMonitor;
 import com.api.deployer.ui.components.workstations.WorkstationComponent;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.data.workstations.Workstation;
+import com.redshape.daemon.DaemonException;
+import com.redshape.daemon.IDaemonEvent;
+import com.redshape.daemon.events.ServiceBindedEvent;
 import com.redshape.ui.Dispatcher;
 import com.redshape.ui.application.AbstractController;
 import com.redshape.ui.application.UnhandledUIException;
@@ -24,6 +24,7 @@ import com.redshape.ui.application.events.UIEvents;
 import com.redshape.ui.utils.UIConstants;
 import com.redshape.ui.utils.UIRegistry;
 import com.redshape.ui.windows.swing.ISwingWindowsManager;
+import com.redshape.utils.events.IEventListener;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
@@ -103,7 +104,7 @@ public class ConnectorController extends AbstractController {
 		job.setDelay( delay );
 		
 		try {
-			this.getConnector().executeJob( job );
+			this.getConnector().executeJob( JobScope.AGENT, subject.getId(), job );
 		} catch ( RemoteException e ) {
 			throw new UnhandledUIException("Job scheduling exception", e );
 		}
@@ -158,15 +159,7 @@ public class ConnectorController extends AbstractController {
 	@Action( eventType = "DeployAgentConnector.Event.Provided" )
 	public void connectionProvidedAction( AppEvent event ) {
 		DeployAgentConnector connector = this.getConnector();
-		connector.setThreadExceptionsHandler( new Thread.UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				log.info("Exception in thread:" + t.getId() );
-				log.error( e.getMessage(), e );
-				Dispatcher.get().forwardEvent( DeployAgentConnector.Event.Fail, e.getMessage() );
-			}
-		});
-		
+
 		connector.setHost( event.<String>getArg(0) );
 		connector.setPort( event.<Integer>getArg(1) );
 		connector.setPath( event.<String>getArg(2) );
@@ -200,7 +193,7 @@ public class ConnectorController extends AbstractController {
 		job.setDelay( delay );
 		
 		try {
-			this.getConnector().executeJob( job );
+			this.getConnector().executeJob( JobScope.AGENT, subject.getId(), job );
 		} catch ( RemoteException e ) {
 			throw new UnhandledUIException("Job scheduling exception", e );
 		}

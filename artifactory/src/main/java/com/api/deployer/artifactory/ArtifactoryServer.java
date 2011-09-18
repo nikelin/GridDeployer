@@ -1,18 +1,14 @@
 package com.api.deployer.artifactory;
 
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.daemon.AbstractRMIDaemon;
-import com.api.daemon.DaemonException;
-import com.api.daemon.IDaemonAttributes;
 import com.api.deployer.artifactory.services.ArtifactoryService;
-import com.api.deployer.backup.artifactory.IArtifactoryFacade;
 import com.api.deployer.services.ClientsFactory;
 import com.api.deployer.services.ServerFactory;
+import com.redshape.daemon.AbstractRMIDaemon;
+import com.redshape.daemon.DaemonException;
+import com.redshape.daemon.IDaemonAttributes;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
 import org.apache.log4j.Logger;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author nikelin
@@ -50,11 +46,6 @@ public class ArtifactoryServer extends AbstractRMIDaemon<ArtifactoryServer.Attri
 		} catch ( Throwable e ) {
 			throw new DaemonException( e.getMessage(), e );
 		}
-	}
-
-	@Override
-	protected ExecutorService createThreadExecutor() {
-		return Executors.newFixedThreadPool(10);
 	}
 
 	@Override

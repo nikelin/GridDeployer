@@ -1,9 +1,9 @@
 package com.api.deployer.system.scanners.filters;
 
-import java.util.UUID;
-
-import com.api.commons.IFilter;
 import com.api.deployer.system.devices.IDevice;
+import com.redshape.utils.IFilter;
+
+import java.util.UUID;
 
 public class UUIDDeviceFilter implements IFilter<IDevice> {
 	private UUID uuid;

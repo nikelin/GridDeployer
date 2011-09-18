@@ -1,22 +1,17 @@
 package com.api.deployer.ui.data.jobs.loaders;
 
-import java.rmi.RemoteException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
-
+import com.api.deployer.execution.IExecutorDescriptor;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.data.jobs.Job;
-import org.springframework.context.ApplicationContext;
-
-import com.api.deployer.execution.IExecutorDescriptor;
-import com.api.deployer.jobs.IJob;
+import com.redshape.daemon.jobs.IJob;
 import com.redshape.ui.data.loaders.AbstractDataLoader;
 import com.redshape.ui.data.loaders.LoaderException;
 import com.redshape.ui.utils.UIConstants;
 import com.redshape.ui.utils.UIRegistry;
+import org.springframework.context.ApplicationContext;
+
+import java.rmi.RemoteException;
+import java.util.*;
 
 public class AgentJobsLoader extends AbstractDataLoader<Job> {
 
@@ -33,7 +28,7 @@ public class AgentJobsLoader extends AbstractDataLoader<Job> {
 					IJob nativeJob = jobsIterator.next();
 					if ( nativeJob != null ) {
 						Job job = new Job();
-						job.setId( nativeJob.getId() );
+						job.setId( nativeJob.getJobId() );
 						result.add(job);
 					}
 				}

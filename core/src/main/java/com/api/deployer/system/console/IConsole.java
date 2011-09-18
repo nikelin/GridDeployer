@@ -1,4 +1,4 @@
- package com.api.deployer.system.console;
+package com.api.deployer.system.console;
 
 import com.api.deployer.system.scripts.IScriptExecutor;
 import com.api.deployer.system.scripts.IScriptListExecutor;

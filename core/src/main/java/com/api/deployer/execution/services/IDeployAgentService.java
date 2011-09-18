@@ -1,13 +1,13 @@
 package com.api.deployer.execution.services;
 
+import com.api.deployer.execution.IJobExecutor;
+import com.api.deployer.system.devices.IDevice;
+import com.redshape.daemon.IRemoteService;
+import com.redshape.utils.IFilter;
+
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.UUID;
-
-import com.api.commons.IFilter;
-import com.api.daemon.IRemoteService;
-import com.api.deployer.system.devices.IDevice;
-import com.api.deployer.execution.IJobExecutor;
 
 public interface IDeployAgentService extends IJobExecutor, IRemoteService {
 	

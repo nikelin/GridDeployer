@@ -7,7 +7,7 @@ public class StorageDeviceModel extends AbstractDeviceModel {
 	public final static String PATH = "path";
 	public final static String NAME = "name";
 	public final static String PARTITIONS = "partitions";
-	
+
 	public StorageDeviceModel() {
 		super( StorageDevice.class );
 		

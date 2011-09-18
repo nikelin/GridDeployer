@@ -1,10 +1,10 @@
 package com.api.deployer.backup.artifactory.artifacts.writers;
 
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.config.IWritableConfig;
 import com.api.deployer.backup.artifactory.WriterException;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.config.IWritableConfig;
 
 public abstract class AbstractArtifactWriter implements IArtifactWriter {
 	private IArtifact artifact;

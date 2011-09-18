@@ -1,6 +1,6 @@
 package com.api.deployer.jobs.system;
 
-import com.api.deployer.jobs.IJob;
+import com.redshape.daemon.jobs.IJob;
 
 public interface IShutdownJob extends IJob {
 	

@@ -1,11 +1,11 @@
 package com.api.deployer.notifications.transports;
 
-import com.api.daemon.services.Connector;
 import com.api.deployer.execution.services.INotificationService;
 import com.api.deployer.io.transport.IDestination;
 import com.api.deployer.notifications.INotification;
 import com.api.deployer.notifications.ITransport;
 import com.api.deployer.notifications.NotificationException;
+import com.redshape.daemon.services.Connector;
 
 import java.net.URI;
 import java.net.URISyntaxException;

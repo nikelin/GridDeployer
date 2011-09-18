@@ -1,5 +1,7 @@
 package com.api.deployer.ui.components.groups.components;
 
+import com.redshape.ui.data.adapters.swing.AbstractDataTree;
+
 import com.api.deployer.ui.components.groups.GroupsComponent;
 import com.api.deployer.ui.components.groups.components.tree.TreeContextMenu;
 import com.api.deployer.ui.data.workstations.Workstation;

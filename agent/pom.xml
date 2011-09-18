@@ -72,21 +72,6 @@
 
 	<dependencies>
 		<dependency>
-			<artifactId>daemon</artifactId>
-			<groupId>com.api</groupId>
-			<version>${api.version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>jobs</artifactId>
-			<groupId>com.api.deployer</groupId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<artifactId>commons</artifactId>
-			<groupId>com.api</groupId>
-			<version>${api.version}</version>
-		</dependency>
-		<dependency>
 			<artifactId>core</artifactId>
 			<groupId>com.api.deployer</groupId>
 			<version>${project.version}</version>

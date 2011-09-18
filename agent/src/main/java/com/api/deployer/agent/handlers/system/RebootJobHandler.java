@@ -1,26 +1,20 @@
 package com.api.deployer.agent.handlers.system;
 
+import com.api.deployer.jobs.system.IRebootJob;
+import com.api.deployer.system.ISystemFacade;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.jobs.result.JobResult;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
-
-import com.api.deployer.jobs.handlers.AbstractJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
-import com.api.deployer.jobs.result.IJobResult;
-import com.api.deployer.jobs.result.JobResult;
-import com.api.deployer.jobs.result.JobStatus;
-import com.api.deployer.jobs.system.IRebootJob;
-import com.api.deployer.system.ISystemFacade;
 
 public class RebootJobHandler extends AbstractJobHandler<IRebootJob, IJobResult> {
 	private ThreadLocal<Date> startTime = new ThreadLocal<Date>();
 	private ThreadLocal<IRebootJob> job = new ThreadLocal<IRebootJob>();
 
-	public RebootJobHandler( ISystemFacade facade ) {
-		super(facade);
-	}
-
-	@Override
 	public Integer getProgress() {
 		return (int) ( new Date().getTime() / ( this.startTime.get().getTime() + this.job.get().getDelay() ) );
 	}
@@ -36,9 +30,9 @@ public class RebootJobHandler extends AbstractJobHandler<IRebootJob, IJobResult>
 			this.startTime.set( new Date() );
 			this.job.set( job );
 
-			this.getSystem().reboot(job.getDelay());
+			this.getContext().getBean(ISystemFacade.class).reboot(job.getDelay());
 			
-			return this.createJobResult( job.getId() );
+			return this.createJobResult( job.getJobId() );
 		} catch ( IOException e ) {
 			throw new HandlingException( e.getMessage(), e );
 		}

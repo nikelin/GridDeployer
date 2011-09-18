@@ -1,16 +1,16 @@
 package com.api.deployer.backup.artifactory.artifacts.readers;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
-
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
 import com.api.deployer.backup.artifactory.ReaderException;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
 import com.api.deployer.backup.compression.CompressionLevel;
 import com.api.deployer.backup.compression.CompressionMethod;
 import com.api.deployer.backup.diff.DiffMethod;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
 
 public class DriveArtifactReader implements IDriveArtifactReader {
 	private IArtifact artifact;

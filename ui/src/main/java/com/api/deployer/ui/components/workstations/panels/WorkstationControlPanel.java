@@ -188,7 +188,7 @@ public class WorkstationControlPanel extends FormPanel {
 		
 		store.addListener( StoreEvents.Removed, new IEventHandler() {
 			@Override
-			public void handle(AppEvent event) {				
+			public void handle(AppEvent event) {
 				box.removeItem( event.getArg(0) );
 				box.revalidate();
 				box.repaint();
@@ -197,5 +197,4 @@ public class WorkstationControlPanel extends FormPanel {
 		
 		return box;
 	}
-	
 }

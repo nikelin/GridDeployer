@@ -15,7 +15,6 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-
 /**
  * @author nikelin
  */
@@ -82,7 +81,7 @@ public class GroupsWindow extends JFrame {
 				InteractionAction.createAction(
 					"Remove", 
 					this.eventsHandler,
-					new Function<EventHandlers, Void> ( 
+					new Function<EventHandlers, Void> (
 						"onGroupRemove", EventHandlers.class, AppEvent.class
 					) 
 				)	

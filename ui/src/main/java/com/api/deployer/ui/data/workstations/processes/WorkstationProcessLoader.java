@@ -1,10 +1,11 @@
 package com.api.deployer.ui.data.workstations.processes;
 
+import com.api.deployer.jobs.JobScope;
 import com.api.deployer.jobs.requests.ProcessesRequestJob;
-import com.api.deployer.jobs.result.IJobResult;
 import com.api.deployer.system.processes.system.IMonitoredProcess;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.data.workstations.Workstation;
+import com.redshape.daemon.jobs.result.IJobResult;
 import com.redshape.ui.data.loaders.AbstractDataLoader;
 import com.redshape.ui.data.loaders.LoaderException;
 import com.redshape.ui.utils.UIRegistry;
@@ -36,7 +37,9 @@ public class WorkstationProcessLoader extends AbstractDataLoader<WorkstationProc
     @Override
     protected Collection<WorkstationProcess> doLoad() throws LoaderException {
         try {
-            IJobResult result = this.getConnector().executeJob( new ProcessesRequestJob( this.workstation.getId() ) );
+            IJobResult result = this.getConnector()
+							.executeJob(JobScope.AGENT,
+									this.workstation.getId(), new ProcessesRequestJob());
 
             Collection<WorkstationProcess> list = new HashSet<WorkstationProcess>();
 

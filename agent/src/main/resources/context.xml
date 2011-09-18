@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:p="http://www.springframework.org/schema/p"
@@ -207,4 +208,215 @@
 		</property>
 	</bean>
 
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.api.deployer"/>
+
+	<import resource="xml-config.xml"/>
+
+    <bean id="hasher" class="com.api.commons.hashers.MD5" scope="singleton"/>
+
+    <bean id="config" class="com.api.commons.config.XMLConfig" scope="singleton">
+        <constructor-arg><ref bean="xmlHelper"/></constructor-arg>
+        <constructor-arg value="config.xml"/>
+    </bean>
+
+	<bean scope="singleton" id="console" 
+		class="com.api.deployer.system.console.Console"/>
+	
+	<bean scope="singleton" id="linuxFSScanner"
+		class="com.api.deployer.system.linux.scanners.LinuxFSScanner"/>
+
+    <bean scope="singleton" id="linuxNetworkScanner"
+        class="com.api.deployer.system.linux.scanners.LinuxNetworkScanner"/>
+
+	<bean scope="singleton" id="systemFacade" 
+		class="com.api.deployer.system.linux.SystemFacade">
+		<constructor-arg><ref bean="console"/></constructor-arg>
+		<property name="scanners">
+			<list>
+				<ref bean="linuxFSScanner"/>
+                <ref bean="linuxNetworkScanner"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Backup engines -->
+	
+	<bean scope="singleton" id="extfsPartcloneEngine" 
+		class="com.api.deployer.backup.storages.partclone.extfs.ExtfsPartcloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean scope="singleton" id="genericBackupEngine" 
+		class="com.api.deployer.backup.storages.generic.DDCloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean scope="singleton" id="swapCloneEngine" 
+		class="com.api.deployer.backup.storages.generic.SwapCloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean scope="singleton" id="ntfsPartcloneEngine" 
+		class="com.api.deployer.backup.storages.partclone.ntfs.NtfsPartcloneEngine">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<!-- Filesystem types -->
+	<bean scope="singleton" id="ext2fs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.EXT2</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="ext3fs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.EXT3</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="ext4fs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.EXT4</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="ntfs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.NTFS</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="swapfs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.SWAP</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="genericfs" factory-method="valueOf"
+		class="com.api.deployer.system.devices.storage.StorageFilesystem">
+		<constructor-arg><value>StorageFilesystem.GENERIC</value></constructor-arg>	
+	</bean>
+	
+	<bean scope="singleton" id="backupFacade" class="com.api.deployer.backup.storages.StorageBackupFacade">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+		<property name="engines">
+			<map>
+				<entry>
+					<key><ref bean="ext2fs"/></key>
+					<ref bean="extfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="ext3fs"/></key>
+					<ref bean="extfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="ext4fs"/></key>
+					<ref bean="extfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="ntfs"/></key>
+					<ref bean="ntfsPartcloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="swapfs"/></key>
+					<ref bean="swapCloneEngine"/>
+				</entry>
+				<entry>
+					<key><ref bean="genericfs"/></key>
+					<ref bean="genericBackupEngine"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean scope="singleton" id="driveBackupEngine"
+		class="com.api.deployer.backup.storages.drive.DriveBackupEngine">
+		<constructor-arg><ref bean="backupFacade"/></constructor-arg>
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<!-- Destinations mounters definition (ssh, local, etc.)-->
+	
+	<bean id="sshMounter" class="com.api.deployer.io.transport.ssh.mounters.SSHMounter">
+		<constructor-arg><ref bean="systemFacade"/></constructor-arg>
+	</bean>
+	
+	<bean id="localMounter" class="com.api.deployer.io.transport.local.local.LocalMounter"/>
+	
+	<bean scope="singleton" id="destinationMountingFacade"
+		class="com.api.deployer.io.transport.mounters.DestinationMountingFacade">
+		
+		<property name="mounters">
+			<set>
+				<ref bean="sshMounter"/>
+				<ref bean="localMounter"/>
+			</set>
+		</property>
+	</bean>
+
+	<!-- Jobs handlers -->
+
+	<bean id="jobsManager" class="com.api.deployer.jobs.manager.JobsManager">
+		<property name="handlers">
+			<map>
+                <entry>
+                    <key>
+                        <value type="java.lang.Class">com.api.deployer.jobs.configuration.network.NetworkConfigurationJob</value>
+                    </key>
+                    <bean scope="singleton" class="com.api.deployer.agent.handlers.configuration.NetworkConfigurationJobHandler">
+                        <constructor-arg><ref bean="systemFacade"/></constructor-arg>
+                    </bean>
+                </entry>
+                <entry>
+                    <key>
+                        <value type="java.lang.Class">com.api.deployer.jobs.configuration.network.routes.AddRouteJob</value>
+                    </key>
+                    <bean scope="singleton" class="com.api.deployer.agent.handlers.configuration.routes.AddRouteJobHandler">
+                        <constructor-arg><ref bean="systemFacade"/></constructor-arg>
+                    </bean>
+                </entry>
+                <entry>
+                    <key>
+                        <value type="java.lang.Class">com.api.deployer.jobs.configuration.network.routes.DelRouteJob</value>
+                    </key>
+                    <bean scope="singleton" class="com.api.deployer.agent.handlers.configuration.routes.DelRouteJobHandler">
+                        <constructor-arg><ref bean="systemFacade"/></constructor-arg>
+                    </bean>
+                </entry>
+                <entry>
+                    <key><value type="java.lang.Class">com.api.deployer.jobs.backup.StorageDriveBackupJob</value></key>
+                    <bean id="storageDriveBackupJobHandler" class="com.api.deployer.agent.handlers.backup.StorageBackupJobHandler">
+                        <constructor-arg><ref bean="systemFacade"/></constructor-arg>
+                    </bean>
+                </entry>
+                <entry>
+                    <key>
+                        <value type="java.lang.Class">com.api.deployer.jobs.system.ExecuteScriptJob</value>
+                    </key>
+                    <bean scope="singleton" class="com.api.deployer.agent.handlers.system.ExecuteScriptJobHandler">
+                        <constructor-arg><ref bean="systemFacade"/></constructor-arg>
+                    </bean>
+                </entry>
+				<entry>
+					<key><value type="java.lang.Class">com.api.deployer.jobs.system.RebootJob</value></key>
+                    <bean id="rebootJobHandler" class="com.api.deployer.agent.handlers.system.RebootJobHandler">
+                        <constructor-arg><ref bean="systemFacade"/></constructor-arg>
+                    </bean>
+				</entry>
+				<entry>
+					<key><value type="java.lang.Class">com.api.deployer.jobs.system.ShutdownJob</value></key>
+					<bean id="shutdownJobHandler" class="com.api.deployer.agent.handlers.system.ShutdownJobHandler">
+                        <constructor-arg><ref bean="systemFacade"/></constructor-arg>
+                    </bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+>>>>>>> 96adddcf4b9dc0d1d4b8d47890186ddee7227864
 </beans>

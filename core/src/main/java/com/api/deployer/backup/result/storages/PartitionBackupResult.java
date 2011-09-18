@@ -1,12 +1,12 @@
 package com.api.deployer.backup.result.storages;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.UUID;
-
 import com.api.deployer.system.devices.storage.PartitionFlag;
 import com.api.deployer.system.devices.storage.PartitionType;
 import com.api.deployer.system.devices.storage.StorageFilesystem;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
 
 public class PartitionBackupResult implements IPartitionBackupResult {
 	private String finalName;

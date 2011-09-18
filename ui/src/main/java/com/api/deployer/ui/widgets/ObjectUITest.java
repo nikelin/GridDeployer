@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 public class ObjectUITest extends AbstractWidget {
 	private static final Logger log = Logger.getLogger( ObjectUITest.class );
 	

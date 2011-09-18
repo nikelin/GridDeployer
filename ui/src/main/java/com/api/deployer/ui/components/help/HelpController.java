@@ -1,5 +1,7 @@
 package com.api.deployer.ui.components.help;
 
+import com.redshape.ui.application.AbstractController;
+
 import com.api.deployer.ui.components.help.windows.AboutWindow;
 import com.redshape.ui.application.AbstractController;
 import com.redshape.ui.application.annotations.Action;

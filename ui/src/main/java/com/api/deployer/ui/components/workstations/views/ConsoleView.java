@@ -1,5 +1,7 @@
 package com.api.deployer.ui.components.workstations.views;
 
+import com.redshape.ui.views.IView;
+
 import com.api.deployer.ui.components.workstations.WorkstationComponent;
 import com.api.deployer.ui.data.workstations.Workstation;
 import com.redshape.ui.Dispatcher;

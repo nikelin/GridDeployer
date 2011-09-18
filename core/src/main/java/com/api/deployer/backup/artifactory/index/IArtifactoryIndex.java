@@ -1,10 +1,10 @@
 package com.api.deployer.backup.artifactory.index;
 
-import java.util.Collection;
-
-import com.api.commons.IFilter;
 import com.api.deployer.backup.artifactory.ArtifactoryVersion;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
+import com.redshape.utils.IFilter;
+
+import java.util.Collection;
 
 public interface IArtifactoryIndex {
 	

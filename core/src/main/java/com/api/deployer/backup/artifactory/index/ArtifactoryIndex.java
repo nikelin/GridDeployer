@@ -1,11 +1,11 @@
 package com.api.deployer.backup.artifactory.index;
 
-import java.util.*;
-
-import com.api.commons.IFilter;
-import com.api.deployer.backup.artifactory.filters.UUIDFilter;
 import com.api.deployer.backup.artifactory.ArtifactoryVersion;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
+import com.api.deployer.backup.artifactory.filters.UUIDFilter;
+import com.redshape.utils.IFilter;
+
+import java.util.*;
 
 public class ArtifactoryIndex implements IArtifactoryIndex {
 	private ArtifactoryVersion version;

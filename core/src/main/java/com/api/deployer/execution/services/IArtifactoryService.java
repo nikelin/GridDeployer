@@ -1,10 +1,10 @@
 package com.api.deployer.execution.services;
 
-import com.api.commons.IFilter;
-import com.api.daemon.IRemoteService;
 import com.api.deployer.backup.artifactory.ArtifactoryVersion;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
 import com.api.deployer.io.transport.IDestination;
+import com.redshape.daemon.IRemoteService;
+import com.redshape.utils.IFilter;
 
 import java.rmi.RemoteException;
 import java.util.Collection;

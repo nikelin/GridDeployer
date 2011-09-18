@@ -1,10 +1,10 @@
 package com.api.deployer.backup.artifactory.artifacts.writers;
 
-import com.api.commons.config.IConfig;
 import com.api.deployer.backup.artifactory.WriterException;
 import com.api.deployer.backup.compression.CompressionLevel;
 import com.api.deployer.backup.compression.CompressionMethod;
 import com.api.deployer.backup.diff.DiffMethod;
+import com.redshape.utils.config.IConfig;
 
 public interface IArtifactWriter {
 	

@@ -55,7 +55,7 @@ public class PartitionsEditorPanel extends JPanel {
 		JPanel devicesPane = new JPanel();
 		try {
 			for ( IDevice device : this.getDevices() ) {
-				devicesPane.add( device.getPath(), this.createDevicePane( (IStorageDriveDevice) device ) );
+				devicesPane.add( device.getPath(), this.createDevicePane( (IStorageDriveDevice ) device ) );
 			}
 		} catch ( Throwable e ) {
 			throw new UnhandledUIException( e.getMessage(), e );

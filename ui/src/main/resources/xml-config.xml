@@ -6,11 +6,6 @@
 
     <bean id="resourcesLoader" class="com.redshape.utils.ResourcesLoader" scope="singleton"/>
 
-	<bean id="nativeResourcesLoader" class="com.api.commons.ResourcesLoader" scope="singleton"/>
-
     <bean id="xmlHelper" class="com.redshape.utils.helpers.XMLHelper" scope="singleton"
           p:loader-ref="resourcesLoader"/>
-          
-    <bean id="nativeXmlHelper" class="com.api.commons.XMLHelper" scope="singleton"
-          p:loader-ref="nativeResourcesLoader"/>
 </beans>

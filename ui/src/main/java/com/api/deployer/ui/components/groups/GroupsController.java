@@ -10,13 +10,12 @@ import com.api.deployer.ui.components.groups.windows.GroupsWindow;
 import com.api.deployer.ui.data.workstations.groups.StationGroupsStore;
 import com.api.deployer.ui.data.workstations.groups.WorkstationGroup;
 import com.redshape.ui.application.AbstractController;
+import com.redshape.ui.application.annotations.Action;
 import com.redshape.ui.application.events.AppEvent;
 import com.redshape.ui.utils.UIRegistry;
 import com.redshape.ui.windows.swing.ISwingWindowsManager;
 
 import javax.swing.*;
-
-import com.redshape.ui.application.annotations.Action;
 
 /**
  *

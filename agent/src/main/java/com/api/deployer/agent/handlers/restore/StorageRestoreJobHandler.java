@@ -1,39 +1,44 @@
 package com.api.deployer.agent.handlers.restore;
 
-import java.io.File;
-import java.rmi.RemoteException;
-import java.util.UUID;
-
-import com.api.commons.XMLHelper;
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.config.IWritableConfig;
-import com.api.commons.config.XMLConfig;
 import com.api.deployer.backup.BackupException;
 import com.api.deployer.backup.IBackupEngine;
 import com.api.deployer.backup.result.storages.IDriveBackupResult;
 import com.api.deployer.backup.storages.IStorageBackupFacade;
-import com.api.deployer.system.devices.IDevice;
-import com.api.deployer.system.devices.storage.IStorageDriveDevice;
 import com.api.deployer.execution.services.IArtifactoryService;
 import com.api.deployer.io.transport.IDestination;
 import com.api.deployer.io.transport.mounters.IDestinationMounter;
 import com.api.deployer.io.transport.mounters.IDestinationMountingFacade;
 import com.api.deployer.io.transport.mounters.MountException;
-import com.api.deployer.jobs.handlers.AbstractAwareJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
 import com.api.deployer.jobs.restore.IStorageDriveRestoreJob;
-import com.api.deployer.jobs.result.IJobResult;
+import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.IDevice;
+import com.api.deployer.system.devices.storage.IStorageDriveDevice;
 import com.api.deployer.system.scanners.ScannerException;
 import com.api.deployer.system.scanners.filters.StorageDriveDeviceFilter;
-import com.api.deployer.system.ISystemFacade;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.config.IWritableConfig;
+import com.redshape.utils.config.XMLConfig;
+import com.redshape.utils.helpers.XMLHelper;
 
-public class StorageRestoreJobHandler extends AbstractAwareJobHandler<IStorageDriveRestoreJob, IJobResult> {
+import java.io.File;
+import java.rmi.RemoteException;
+import java.util.UUID;
+
+public class StorageRestoreJobHandler extends AbstractJobHandler<IStorageDriveRestoreJob, IJobResult> {
+	private ISystemFacade facade;
 
 	public StorageRestoreJobHandler(ISystemFacade facade) {
-		super(facade);
+		this.facade = facade;
 	}
-	
+
+	public ISystemFacade getFacade() {
+		return facade;
+	}
+
 	protected IStorageBackupFacade getBackupFacade() {
 		IStorageBackupFacade facade = this.getContext().getBean( IStorageBackupFacade.class );
 		facade.setContext( this.getContext() );
@@ -44,7 +49,6 @@ public class StorageRestoreJobHandler extends AbstractAwareJobHandler<IStorageDr
 		return this.getContext().getBean( IDestinationMountingFacade.class );
 	}
 
-	@Override
 	public Integer getProgress() {
 		throw new UnsupportedOperationException("Operation not implemented");
 	}
@@ -58,7 +62,7 @@ public class StorageRestoreJobHandler extends AbstractAwareJobHandler<IStorageDr
 	public IJobResult handle( final IStorageDriveRestoreJob job )
 			throws HandlingException {
 		try {
-			IArtifactoryService artifactoryService = this.getManagerContext().getArtifactoryService();
+			IArtifactoryService artifactoryService = this.getContext().getBean(IArtifactoryService.class);
 
 			IDestination destination = artifactoryService.getDestination();
 
@@ -71,7 +75,7 @@ public class StorageRestoreJobHandler extends AbstractAwareJobHandler<IStorageDr
 			
 			String path = mounter.mount( destination, true ) + File.separator + job.getArtifactId();
 			
-			IStorageDriveDevice device = (IStorageDriveDevice) this.getSystem()
+			IStorageDriveDevice device = (IStorageDriveDevice) this.getFacade()
 				 .getDevice( 
 				 	new StorageDriveDeviceFilter() {
 						private static final long serialVersionUID = 6011858507398632782L;
@@ -109,7 +113,7 @@ public class StorageRestoreJobHandler extends AbstractAwareJobHandler<IStorageDr
 			
 			engine.restore( path, device, artifactMeta );
 			
-			return this.createJobResult( job.getId() );
+			return this.createJobResult( job.getJobId() );
 		} catch ( MountException e ) {
 			throw new HandlingException("Cannot mount destination source", e);
 		} catch ( ConfigException e ) {

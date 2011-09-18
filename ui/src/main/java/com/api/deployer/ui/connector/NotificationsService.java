@@ -1,18 +1,21 @@
 package com.api.deployer.ui.connector;
 
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.events.*;
-import com.api.daemon.*;
-import com.api.daemon.services.ClientsFactory;
-import com.api.daemon.services.ServerFactory;
-import com.api.daemon.traits.IPublishableDaemon;
 import com.api.deployer.execution.services.INotificationService;
 import com.api.deployer.notifications.INotification;
 import com.api.deployer.ui.components.notifications.NotificationsComponent;
-import com.api.deployer.ui.components.system.SystemComponent;
+import com.redshape.daemon.AbstractRMIDaemon;
+import com.redshape.daemon.DaemonAttributes;
+import com.redshape.daemon.DaemonException;
+import com.redshape.daemon.services.ClientsFactory;
+import com.redshape.daemon.services.ServerFactory;
+import com.redshape.daemon.traits.IPublishableDaemon;
 import com.redshape.ui.Dispatcher;
-import com.redshape.ui.utils.UIRegistry;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.events.AbstractEvent;
+import com.redshape.utils.events.AbstractEventDispatcher;
+import com.redshape.utils.events.DelegateEventListener;
+import com.redshape.utils.events.IEvent;
 import org.apache.log4j.Logger;
 
 import java.rmi.RemoteException;
@@ -29,7 +32,7 @@ public class NotificationsService extends AbstractRMIDaemon<DaemonAttributes>
 	private boolean doPublishing;
 
 	public NotificationsService( IConfig config ) throws DaemonException, ConfigException {
-		super();
+		super(null);
 
 		this.setConfig( config );
 
@@ -50,7 +53,17 @@ public class NotificationsService extends AbstractRMIDaemon<DaemonAttributes>
 	}
 
 	@Override
-	public void publish() throws DaemonPublishException {
+	public boolean ping() {
+		return false;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public String status() {
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public void publish() throws DaemonException {
 		try {
 			ServiceImpl service = new ServiceImpl( this.getPath() );
 			service.addEventListener( IEvent.class,
@@ -63,7 +76,7 @@ public class NotificationsService extends AbstractRMIDaemon<DaemonAttributes>
 
 			this.exportService( service );
 		} catch ( Throwable e ) {
-			throw new DaemonPublishException("Unable to start notifications listening service", e);
+			throw new DaemonException("Unable to start notifications listening service", e);
 		}
 	}
 

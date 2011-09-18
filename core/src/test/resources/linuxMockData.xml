@@ -66,4 +66,5 @@ Number  Start   End     Size    Type      File system     Flags
     	<value>blkid /dev/sda5</value>
     	<result>feac35ed-929b-48cd-b394-800f386ac2b5</result>
     </command>
+>>>>>>> 96adddcf4b9dc0d1d4b8d47890186ddee7227864
 </data>

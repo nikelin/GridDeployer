@@ -6,8 +6,7 @@
 	<properties>
 		<junit.version>4.8.2</junit.version>
 		<log4j.version>1.2.9</log4j.version>
-		<api.version>2.0-SNAPSHOT</api.version>
-		<redshape.as.version>1.0.0A</redshape.as.version>
+		<redshape.as.version>3.0.0</redshape.as.version>
 		<deployer.build.path>/archives/workspace/api/deployer/build</deployer.build.path>
 	</properties>
 

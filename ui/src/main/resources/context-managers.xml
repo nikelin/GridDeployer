@@ -13,11 +13,11 @@
 
 	<bean scope="singleton" id="windowsManager" class="com.redshape.ui.windows.swing.WindowsManager"/>
 
-	<bean scope="singleton" id="interactorsFactory" class="com.api.commons.net.io.InteractorsFactory">
+	<bean scope="singleton" id="interactorsFactory" class="com.redshape.io.InteractorsFactory">
 		<property name="interactors">
 			<set>
-				<value type="java.lang.Class">com.api.commons.net.io.interactors.SSHInteractor</value>
-				<value type="java.lang.Class">com.api.commons.net.io.interactors.SambaInteractor</value>
+				<value type="java.lang.Class">com.redshape.io.interactors.SSHInteractor</value>
+				<value type="java.lang.Class">com.redshape.io.interactors.SambaInteractor</value>
 			</set>
 		</property>
 	</bean>
@@ -63,4 +63,7 @@
             <value>30000</value>
         </property>
     </bean>
+
+    <bean scope="singleton" id="notificationsManager"
+          class="com.redshape.ui.application.notifications.NotificationsManager"/>
 </beans>

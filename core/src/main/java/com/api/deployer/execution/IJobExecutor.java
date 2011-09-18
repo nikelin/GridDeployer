@@ -1,11 +1,11 @@
 package com.api.deployer.execution;
 
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.result.IJobResult;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.UUID;
-
-import com.api.deployer.jobs.IJob;
-import com.api.deployer.jobs.result.IJobResult;
 
 public interface IJobExecutor extends Remote {
 	

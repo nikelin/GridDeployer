@@ -1,18 +1,19 @@
 package com.api.deployer.system.linux;
 
-import com.api.commons.IFilter;
+import com.api.deployer.system.INativesLoader;
+import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.PlatformAttribute;
+import com.api.deployer.system.configurers.IPartitionsEditor;
 import com.api.deployer.system.configurers.network.INetworkConfigurer;
+import com.api.deployer.system.console.IConsole;
 import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.devices.storage.IStorageDriveDevice;
 import com.api.deployer.system.linux.configurers.network.StatelessNetworkConfigurer;
 import com.api.deployer.system.scanners.IDeviceScanner;
 import com.api.deployer.system.scanners.ScannerException;
-import com.api.deployer.system.INativesLoader;
-import com.api.deployer.system.configurers.IPartitionsEditor;
-import com.api.deployer.system.ISystemFacade;
-import com.api.deployer.system.PlatformAttribute;
-import com.api.deployer.system.console.IConsole;
 import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.utils.IFilter;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -20,8 +21,6 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author semichevsky

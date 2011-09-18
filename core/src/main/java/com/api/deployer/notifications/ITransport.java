@@ -1,10 +1,8 @@
 package com.api.deployer.notifications;
 
-import com.api.commons.IFilter;
 import com.api.deployer.io.transport.IDestination;
 
 import java.net.URISyntaxException;
-import java.util.Collection;
 
 /**
  * @author nikelin

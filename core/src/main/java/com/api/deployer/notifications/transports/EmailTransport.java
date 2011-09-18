@@ -1,14 +1,12 @@
 package com.api.deployer.notifications.transports;
 
-import com.api.commons.IFilter;
-import com.api.commons.config.IConfig;
 import com.api.deployer.io.transport.IDestination;
 import com.api.deployer.notifications.INotification;
 import com.api.deployer.notifications.ITransport;
 import com.api.deployer.notifications.NotificationException;
+import com.redshape.utils.config.IConfig;
 
 import java.net.URISyntaxException;
-import java.util.Collection;
 
 /**
  * @author nikelin

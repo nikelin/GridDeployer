@@ -17,6 +17,16 @@ import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+
+import com.api.deployer.ui.connector.DeployAgentConnector;
+import org.apache.log4j.Logger;
+
+import com.api.deployer.ui.components.scheduler.SchedulerComponent;
+import com.redshape.ui.Dispatcher;
+
 public class StatusWidget extends AbstractWidget {
 	private static final Logger log = Logger.getLogger( StatusWidget.class );
 	private static final long serialVersionUID = 4072703371137953240L;

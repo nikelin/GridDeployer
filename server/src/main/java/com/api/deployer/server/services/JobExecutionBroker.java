@@ -1,16 +1,16 @@
 package com.api.deployer.server.services;
 
 import com.api.deployer.execution.services.IDeployServerService;
-import com.api.deployer.jobs.IJob;
-import com.api.deployer.jobs.JobException;
-import com.api.deployer.jobs.JobState;
+import com.api.deployer.jobs.JobScope;
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.JobException;
+import com.redshape.daemon.jobs.JobStatus;
 import org.apache.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import java.rmi.RemoteException;
-import java.util.UUID;
 
 /**
  * @author nikelin
@@ -36,23 +36,23 @@ public class JobExecutionBroker implements Job {
             IDeployServerService executor = (IDeployServerService)
                     context.getJobDetail().getJobDataMap().get( DeployServerService.EXECUTION_SERVICE );
 
-            IJob executorJob = executor.getJob( job.getId() );
-            executorJob.setState( JobState.PROCESSING );
+            IJob executorJob = executor.getJob( job.getJobId() );
+            executorJob.setState( JobStatus.PROCESSING );
 
             if ( executor == null ) {
                 throw new JobExecutionException("Executor service referrence not found");
             }
 
-            log.info("Job with ID: " + job.getId() + " being to be activated.");
+            log.info("Job with ID: " + job.getJobId() + " being to be activated.");
 
             try {
-                executor.executeJob( job);
+                executor.executeJob(JobScope.SERVER, null, job);
 
-                executorJob.setState( JobState.WAITING );
+                executorJob.setState( JobStatus.WAITING );
             } catch ( RemoteException e  ) {
-                executor.fail( job.getAgentId(), job.getId(), new JobException( e.getMessage() ) );
+                executor.fail( null, job.getJobId(), new JobException( e.getMessage() ) );
                 log.error( e.getMessage(), e );
-                executorJob.setState( JobState.FAILED );
+                executorJob.setState( JobStatus.FAILED );
             }
 
         } catch ( RemoteException e ) {

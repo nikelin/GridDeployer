@@ -1,7 +1,5 @@
 package com.api.deployer.ui.components.scheduler;
 
-import com.api.deployer.jobs.IJob;
-import com.api.deployer.jobs.activation.JobActivationProfile;
 import com.api.deployer.ui.components.scheduler.windows.ConfigurationWindow;
 import com.api.deployer.ui.components.scheduler.windows.ConfigurationsWindow;
 import com.api.deployer.ui.components.scheduler.windows.JobWindow;
@@ -10,6 +8,8 @@ import com.api.deployer.ui.components.scheduler.windows.details.JobDetailsWindow
 import com.api.deployer.ui.components.system.windows.JobProgressMonitor;
 import com.api.deployer.ui.connector.DeployAgentConnector;
 import com.api.deployer.ui.data.jobs.Job;
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.activation.JobActivationProfile;
 import com.redshape.ui.application.AbstractController;
 import com.redshape.ui.application.UnhandledUIException;
 import com.redshape.ui.application.annotations.Action;
@@ -91,13 +91,11 @@ public class SchedulingController extends AbstractController {
 				continue;
 			}
 
-			jobObject.setAgentId( job.getTarget().getId() );
-
 			resultCollection.add( jobObject );
 		}
 
 		try {
-			this.getConnector().scheduleJobs(resultCollection, profile);
+			this.getConnector().scheduleJobs( null, resultCollection, profile);
 		} catch ( RemoteException e ) {
 			throw new UnhandledUIException("Deploy server interaction exception!", e);
 		}

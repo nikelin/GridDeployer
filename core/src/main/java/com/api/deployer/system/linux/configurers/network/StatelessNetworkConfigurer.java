@@ -1,12 +1,12 @@
 package com.api.deployer.system.linux.configurers.network;
 
-import com.api.commons.StringUtils;
 import com.api.deployer.system.ISystemFacade;
 import com.api.deployer.system.configurers.ConfigurerException;
 import com.api.deployer.system.configurers.network.INetworkConfigurer;
 import com.api.deployer.system.configurers.network.RouteOperation;
 import com.api.deployer.system.devices.INetworkDevice;
 import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.utils.StringUtils;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -41,7 +41,7 @@ public class StatelessNetworkConfigurer implements INetworkConfigurer {
         }
 
         executor.addUnnamedParameter("address")
-                .addUnnamedParameter( StringUtils.IPToString( address.getAddress() ) );
+                .addUnnamedParameter( StringUtils.IPToString(address.getAddress()) );
 
         if ( netmask != null ) {
             executor.addUnnamedParameter("netmask")

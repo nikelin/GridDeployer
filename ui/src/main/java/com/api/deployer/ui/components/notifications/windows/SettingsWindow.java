@@ -6,6 +6,7 @@ import com.redshape.ui.application.events.IEventHandler;
 import com.redshape.ui.application.events.handlers.WindowCloseHandler;
 import com.redshape.ui.components.InteractionAction;
 import com.redshape.ui.panels.FormPanel;
+
 import com.redshape.ui.utils.UIRegistry;
 import com.redshape.utils.config.IWritableConfig;
 

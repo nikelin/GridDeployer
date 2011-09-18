@@ -1,5 +1,17 @@
 package com.api.deployer.system.linux.scanners;
 
+import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.storage.*;
+import com.api.deployer.system.processes.ISystemProcess;
+import com.api.deployer.system.scanners.IDeviceScanner;
+import com.api.deployer.system.scanners.ScannerException;
+import com.api.deployer.system.scripts.IScriptExecutionHandler;
+import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.utils.HasherFactory;
+import com.redshape.utils.IHasher;
+import com.redshape.utils.hashers.MD5;
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -7,24 +19,6 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
-
-import com.api.commons.IHasher;
-import com.api.commons.hashers.MD5;
-import com.api.deployer.system.devices.storage.IStorageDevicePartition;
-import com.api.deployer.system.devices.storage.IStorageDriveDevice;
-import com.api.deployer.system.devices.storage.PartitionFlag;
-import com.api.deployer.system.devices.storage.PartitionType;
-import com.api.deployer.system.devices.storage.StorageDiskDrive;
-import com.api.deployer.system.devices.storage.StorageDiskPartition;
-import com.api.deployer.system.devices.storage.StorageFilesystem;
-import com.api.deployer.system.scanners.IDeviceScanner;
-import com.api.deployer.system.scanners.ScannerException;
-import com.api.deployer.system.ISystemFacade;
-import com.api.deployer.system.processes.ISystemProcess;
-import com.api.deployer.system.scripts.IScriptExecutionHandler;
-import com.api.deployer.system.scripts.IScriptExecutor;
 
 /**
  * @author nikelin
@@ -60,7 +54,7 @@ public class LinuxFSScanner implements IDeviceScanner<IStorageDriveDevice> {
 	}
 	
 	protected IHasher getHasher() {
-		return new MD5();
+		return HasherFactory.getDefault().getHasher(MD5.class);
 	}
 	
 	public Collection<IStorageDriveDevice> scan() throws ScannerException {

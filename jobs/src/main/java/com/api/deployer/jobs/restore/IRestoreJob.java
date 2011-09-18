@@ -1,10 +1,7 @@
 package com.api.deployer.jobs.restore;
 
-import java.util.UUID;
-
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
-import com.api.deployer.io.transport.IDestination;
-import com.api.deployer.jobs.IJob;
+import com.redshape.daemon.jobs.IJob;
 
 public interface IRestoreJob extends IJob {
 	

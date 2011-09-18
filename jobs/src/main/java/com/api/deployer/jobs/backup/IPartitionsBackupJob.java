@@ -1,12 +1,9 @@
 package com.api.deployer.jobs.backup;
 
-import java.util.Collection;
-import java.util.UUID;
-
-import com.api.commons.bindings.annotations.Bindable;
-import com.api.commons.bindings.annotations.ElementType;
 import com.api.deployer.system.devices.storage.IStorageDevicePartition;
 import com.api.deployer.system.devices.storage.IStorageDriveDevice;
+
+import java.util.Collection;
 
 public interface IPartitionsBackupJob extends IBackupJob {
 

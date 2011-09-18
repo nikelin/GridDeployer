@@ -1,28 +1,31 @@
 package com.api.deployer.agent.handlers.restore;
 
+import com.api.deployer.jobs.restore.ISystemRestoreJob;
+import com.api.deployer.system.ISystemFacade;
+import com.redshape.daemon.jobs.handlers.AbstractJobHandler;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.result.JobResult;
+
 import java.util.UUID;
 
-import com.api.deployer.jobs.handlers.AbstractAwareJobHandler;
-import com.api.deployer.jobs.handlers.HandlingException;
-import com.api.deployer.jobs.restore.ISystemRestoreJob;
-import com.api.deployer.jobs.result.JobResult;
-
-import com.api.deployer.system.ISystemFacade;
-
-public class SystemRestoreJobHandler extends AbstractAwareJobHandler<ISystemRestoreJob, JobResult> {
+public class SystemRestoreJobHandler extends AbstractJobHandler<ISystemRestoreJob, JobResult> {
 	private StorageRestoreJobHandler storageHandler;
-	
-	public SystemRestoreJobHandler( ISystemFacade facade ) {
-		super( facade );
+	private ISystemFacade facade;
 
-		this.storageHandler = new StorageRestoreJobHandler( this.getSystem() );
+	public SystemRestoreJobHandler( ISystemFacade facade) {
+		super();
+
+		this.facade = facade;
+
+		this.storageHandler = new StorageRestoreJobHandler( facade );
+	}
+
+	protected ISystemFacade getFacade() {
+		return this.facade;
 	}
 
 	protected StorageRestoreJobHandler getStorageHandler() {
-		if ( this.storageHandler.getContext() == null ) {
-			this.storageHandler.setContext( this.getContext() );
-		}
-		
+		this.storageHandler.setApplicationContext(this.getContext());
 		return this.storageHandler;
 	}
 	
@@ -30,7 +33,6 @@ public class SystemRestoreJobHandler extends AbstractAwareJobHandler<ISystemRest
 		this.storageHandler.cancel();
 	}
 
-	@Override
 	public Integer getProgress() {
 		throw new UnsupportedOperationException("Operation not implemented");
 	}

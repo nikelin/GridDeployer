@@ -1,36 +1,33 @@
 package com.api.deployer.agent.services;
 
+import com.api.deployer.execution.services.IArtifactoryService;
+import com.api.deployer.execution.services.IDeployAgentService;
+import com.api.deployer.execution.services.IDeployServerService;
+import com.api.deployer.system.ISystemFacade;
+import com.api.deployer.system.devices.IDevice;
+import com.api.deployer.system.scanners.ScannerException;
+import com.redshape.daemon.IRemoteService;
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.JobException;
+import com.redshape.daemon.jobs.handlers.HandlingException;
+import com.redshape.daemon.jobs.managers.IJobsManager;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.services.Connector;
+import com.redshape.utils.IFilter;
+import com.redshape.utils.events.AbstractEventDispatcher;
+import org.apache.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
-
 import java.util.Collection;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import com.api.daemon.services.Connector;
-import com.api.deployer.execution.services.IArtifactoryService;
-import com.api.deployer.execution.services.IDeployServerService;
-import org.apache.log4j.Logger;
-
-import com.api.commons.IFilter;
-import com.api.commons.events.AbstractEventDispatcher;
-
-import com.api.daemon.IRemoteService;
-
-import com.api.deployer.system.devices.IDevice;
-import com.api.deployer.execution.services.IDeployAgentService;
-import com.api.deployer.jobs.IJob;
-import com.api.deployer.jobs.JobException;
-import com.api.deployer.jobs.handlers.HandlingException;
-import com.api.deployer.jobs.manager.IJobsManager;
-import com.api.deployer.jobs.result.IJobResult;
-import com.api.deployer.system.scanners.ScannerException;
-import com.api.deployer.system.ISystemFacade;
-
-import org.springframework.context.ApplicationContext;
-
-public class DeployAgentService extends AbstractEventDispatcher 
+public class DeployAgentService extends AbstractEventDispatcher
 								implements IDeployAgentService, IRemoteService, Serializable {
 	private static final Logger log = Logger.getLogger( DeployAgentService.class );
 	private static final long serialVersionUID = -8900430169833689348L;
@@ -88,32 +85,28 @@ public class DeployAgentService extends AbstractEventDispatcher
 	}
 	
 	protected IJobsManager getJobsManager() throws RemoteException {
-		IJobsManager manager = this.jobsManager;
-		if ( manager != null ) {
-			manager.setArtifactoryService( this.getArtifactoryService() );
-			return manager;
-		}
+		this.jobsManager = this.context.getBean( IJobsManager.class );
+		this.jobsManager.setApplicationContext(this.context);
 
-		manager = this.context.getBean( IJobsManager.class );
-
-		manager.setApplicationContext(this.context);
-		manager.setArtifactoryService( this.getArtifactoryService() );
-
-		return manager;
+		return this.jobsManager;
 	}
 	
 	protected void failJob( IJob job, Throwable exception ) throws RemoteException {
-		this.getDeployServer().fail(this.getId(), job != null ? job.getId() : null, new JobException(exception.getMessage(), exception));
-		log.error("Job: " + job.getId() + " has been failed", exception );
+		this.getDeployServer().fail(this.getId(), job != null ? job.getJobId()
+												: null, new JobException(exception.getMessage()
+												,  exception));
+		log.error("Job: " + job.getJobId() + " has been failed", exception );
 	}
 
 	@Override
 	public Integer getJobProgress( UUID jobId ) throws RemoteException {
-		try {
-			return this.getJobsManager().getProgress(jobId);
-		} catch ( HandlingException e ) {
-			throw new RemoteException( "Unexpected exception while progress gathering", e );
-		}
+//		try {
+			// @TODO
+			// return this.getJobsManager().getProgress(jobId);
+			return null;
+//		} catch ( HandlingException e ) {
+//			throw new RemoteException( "Unexpected exception while progress gathering", e );
+//		}
 	}
 
 	@Override
@@ -124,7 +117,7 @@ public class DeployAgentService extends AbstractEventDispatcher
             IJobResult jobResult = this.getThreadsExecutor().submit( new ExecutionThread( this.getJobsManager(), job ) ).get();
             log.info("Job result: " + jobResult );
 
-            this.getDeployServer().complete( this.getId(), job.getId() );
+            this.getDeployServer().complete( this.getId(), job.getJobId() );
 
             return jobResult;
 		} catch ( Throwable e ) {

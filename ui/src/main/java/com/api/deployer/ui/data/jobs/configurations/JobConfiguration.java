@@ -1,7 +1,7 @@
 package com.api.deployer.ui.data.jobs.configurations;
 
-import com.api.deployer.jobs.activation.JobActivationProfile;
 import com.api.deployer.ui.data.jobs.Job;
+import com.redshape.daemon.jobs.activation.JobActivationProfile;
 import com.redshape.ui.data.AbstractModelData;
 
 import java.util.ArrayList;

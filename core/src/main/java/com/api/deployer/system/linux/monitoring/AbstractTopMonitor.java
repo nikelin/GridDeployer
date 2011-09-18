@@ -1,6 +1,5 @@
 package com.api.deployer.system.linux.monitoring;
 
-import com.api.commons.TimeSpan;
 import com.api.deployer.system.ISystemFacade;
 import com.api.deployer.system.monitoring.IMonitor;
 import com.api.deployer.system.processes.system.IMonitoredProcess;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author nikelin

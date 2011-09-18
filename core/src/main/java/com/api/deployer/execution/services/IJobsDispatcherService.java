@@ -1,16 +1,16 @@
 package com.api.deployer.execution.services;
 
+import com.api.deployer.execution.IExecutorDescriptor;
+import com.api.deployer.jobs.JobScope;
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.activation.JobActivationProfile;
+import com.redshape.daemon.jobs.result.IJobResult;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
-
-import com.api.deployer.execution.IExecutorDescriptor;
-import com.api.deployer.jobs.IJob;
-import com.api.deployer.jobs.activation.JobActivationProfile;
-import com.api.deployer.jobs.result.IJobResult;
 
 public interface IJobsDispatcherService extends Remote {
 	
@@ -32,13 +32,13 @@ public interface IJobsDispatcherService extends Remote {
 
     public IJob getJob( UUID jobId ) throws RemoteException;
 
-    public IJobResult executeJob( IJob job ) throws RemoteException;
+    public IJobResult executeJob( JobScope scope, UUID agentId, IJob job ) throws RemoteException;
 
-    public Collection<IJobResult> executeJobs( Collection<IJob> jobs ) throws RemoteException;
+    public Collection<IJobResult> executeJobs( JobScope scope, UUID agentId, Collection<IJob> jobs ) throws RemoteException;
 
-	public UUID scheduleJob( IJob job, JobActivationProfile profile ) throws RemoteException;
+	public UUID scheduleJob( UUID agentId, IJob job, JobActivationProfile profile ) throws RemoteException;
 
-	public Collection<UUID> scheduleJobs( Collection<IJob> jobs, JobActivationProfile profile ) throws RemoteException;
+	public Collection<UUID> scheduleJobs( UUID agentId, Collection<IJob> jobs, JobActivationProfile profile ) throws RemoteException;
 
     public void unscheduleJob( UUID jobId ) throws RemoteException;
 
@@ -54,6 +54,6 @@ public interface IJobsDispatcherService extends Remote {
 	
 	public boolean isFailed( UUID job ) throws RemoteException;
 
-	public Integer getProgress( UUID job ) throws RemoteException;
+	public Integer getProgress( UUID agentId, UUID job ) throws RemoteException;
 	
 }

@@ -3,6 +3,7 @@ package com.api.deployer.ui.components.workstations;
 import com.api.deployer.ui.components.groups.GroupsComponent;
 import com.api.deployer.ui.components.monitoring.MonitoringComponent;
 import com.api.deployer.ui.components.workstations.config.ConfigController;
+
 import com.redshape.ui.application.events.UIEvents;
 import com.redshape.ui.components.AbstractComponent;
 import com.redshape.ui.components.actions.ComponentAction;

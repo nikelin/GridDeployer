@@ -1,37 +1,36 @@
 package com.api.deployer.ui.connector;
 
-import com.api.commons.IFilter;
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.commons.events.IEventListener;
-import com.api.daemon.AbstractRMIDaemon;
-import com.api.daemon.DaemonException;
-import com.api.daemon.DaemonState;
-import com.api.daemon.IDaemonAttributes;
-import com.api.daemon.events.ServiceBindExceptionEvent;
-import com.api.daemon.services.Connector;
 import com.api.deployer.execution.IExecutorDescriptor;
 import com.api.deployer.execution.services.IDeployServerService;
 import com.api.deployer.io.transport.IDestination;
-import com.api.deployer.jobs.IJob;
-import com.api.deployer.jobs.JobException;
-import com.api.deployer.jobs.activation.JobActivationProfile;
-import com.api.deployer.jobs.result.IJobResult;
+import com.api.deployer.jobs.JobScope;
 import com.api.deployer.notifications.INotification;
 import com.api.deployer.services.ClientsFactory;
 import com.api.deployer.services.ServerFactory;
 import com.api.deployer.system.devices.IDevice;
 import com.api.deployer.system.processes.ISystemProcess;
+import com.redshape.daemon.AbstractRMIDaemon;
+import com.redshape.daemon.DaemonException;
+import com.redshape.daemon.DaemonState;
+import com.redshape.daemon.IDaemonAttributes;
+import com.redshape.daemon.events.ServiceBindExceptionEvent;
+import com.redshape.daemon.jobs.IJob;
+import com.redshape.daemon.jobs.JobException;
+import com.redshape.daemon.jobs.activation.JobActivationProfile;
+import com.redshape.daemon.jobs.result.IJobResult;
+import com.redshape.daemon.services.Connector;
 import com.redshape.ui.Dispatcher;
 import com.redshape.ui.application.events.AppEvent;
 import com.redshape.ui.application.events.UIEvents;
+import com.redshape.utils.IFilter;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
+import com.redshape.utils.events.IEventListener;
 import org.apache.log4j.Logger;
 
 import java.net.URI;
 import java.rmi.RemoteException;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector.Attributes>
 							  	  implements IDeployServerService {
@@ -172,8 +171,6 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
 	}
 
 	protected void onExceptionEvent( ServiceBindExceptionEvent event ) {
-		this.getThreadExceptionsHandler()
-			.uncaughtException(Thread.currentThread(), event.getException());
 		this.changeState( DaemonState.ERROR );
 		Dispatcher.get().forwardEvent( DeployAgentConnector.Event.Fail );
 	}
@@ -232,11 +229,6 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
 	@Override
 	public void startRegistry() {
 		System.out.println("Registry startup declined...");
-	}
-
-	@Override
-	protected ExecutorService createThreadExecutor() {
-		return Executors.newFixedThreadPool(50);
 	}
 
 	@Override
@@ -325,12 +317,12 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
 	}
 
     @Override
-    public Collection<IJobResult> executeJobs(Collection<IJob> jobs) throws RemoteException {
+    public Collection<IJobResult> executeJobs( JobScope scope, UUID agentId, Collection<IJob> jobs) throws RemoteException {
         if ( !this.isConnected() ) {
             return new HashSet<IJobResult>();
         }
 
-        Collection<IJobResult> results = this.getDeployService().executeJobs( jobs );
+        Collection<IJobResult> results = this.getDeployService().executeJobs( scope, agentId, jobs );
 
         Dispatcher.get().forwardEvent( new AppEvent( DeployAgentConnector.Event.Job.Scheduled, results ) );
 
@@ -338,12 +330,12 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
     }
 
     @Override
-    public IJobResult executeJob(IJob job) throws RemoteException {
+    public IJobResult executeJob(JobScope scope, UUID agentId, IJob job) throws RemoteException {
         if ( !this.isConnected() ) {
             return null;
         }
 
-        IJobResult result = this.getDeployService().executeJob(job);
+        IJobResult result = this.getDeployService().executeJob(scope, agentId, job);
 
         Dispatcher.get().forwardEvent( new AppEvent( DeployAgentConnector.Event.Job.Scheduled, result ) );
 
@@ -360,12 +352,12 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
     }
 
     @Override
-	public Collection<UUID> scheduleJobs(Collection<IJob> jobs, JobActivationProfile profile) throws RemoteException {
+	public Collection<UUID> scheduleJobs(UUID agentId, Collection<IJob> jobs, JobActivationProfile profile) throws RemoteException {
         if ( !this.isConnected() ) {
             return new HashSet<UUID>();
         }
 
-	    return this.getDeployService().scheduleJobs( jobs, profile );
+	    return this.getDeployService().scheduleJobs( agentId, jobs, profile );
 	}
 
     @Override
@@ -387,12 +379,12 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
     }
 
     @Override
-	public UUID scheduleJob(IJob job, JobActivationProfile profile ) throws RemoteException {
+	public UUID scheduleJob(UUID agentId, IJob job, JobActivationProfile profile ) throws RemoteException {
 		if ( !this.isConnected() ) {
 			return null;
 		}
 
-        UUID descriptor = this.getDeployService().scheduleJob(job, profile);
+        UUID descriptor = this.getDeployService().scheduleJob(agentId, job, profile);
 
 		Dispatcher.get().forwardEvent( new AppEvent( DeployAgentConnector.Event.Job.Scheduled, descriptor ) );
 
@@ -438,7 +430,7 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
 	}
 
 	@Override
-	public void fail(UUID agentId, UUID jobId, JobException e)
+	public void fail( UUID agentId, UUID jobId, JobException e)
 			throws RemoteException {
 		throw new RuntimeException();
 	}
@@ -472,12 +464,12 @@ public class DeployAgentConnector extends AbstractRMIDaemon<DeployAgentConnector
 	}
 
 	@Override
-	public Integer getProgress( UUID job ) throws RemoteException {
+	public Integer getProgress( UUID agentId, UUID jobId ) throws RemoteException {
 		if ( !this.isConnected() ) {
 			return 0;
 		}
 
-		return this.getDeployService().getProgress(job);
+		return this.getDeployService().getProgress(agentId, jobId);
 	}
 
 	@Override

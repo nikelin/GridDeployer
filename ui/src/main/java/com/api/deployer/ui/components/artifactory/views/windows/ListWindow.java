@@ -1,6 +1,5 @@
 package com.api.deployer.ui.components.artifactory.views.windows;
 
-import com.api.commons.config.IConfig;
 import com.api.deployer.backup.artifactory.artifacts.IArtifact;
 import com.api.deployer.ui.components.artifactory.ArtifactoryComponent;
 import com.api.deployer.ui.components.artifactory.data.Artifact;
@@ -15,6 +14,7 @@ import com.redshape.ui.application.events.UIEvents;
 import com.redshape.ui.components.InteractionAction;
 import com.redshape.ui.data.loaders.LoaderException;
 import com.redshape.ui.utils.UIRegistry;
+import com.redshape.utils.config.IConfig;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;

@@ -5,7 +5,6 @@ import com.redshape.ui.application.events.handlers.WindowCloseHandler;
 import com.redshape.ui.components.InteractionAction;
 import com.redshape.ui.data.adapters.swing.TableModelMapAdapter;
 import com.redshape.ui.panels.FormPanel;
-
 import javax.swing.*;
 
 /**

@@ -1,11 +1,10 @@
 package com.api.deployer.system.scanners.mock;
 
-import com.api.commons.config.ConfigException;
-import com.api.commons.config.IConfig;
-import com.api.deployer.system.scripts.IScriptExecutor;
-import com.api.deployer.system.linux.scripts.bash.BashScriptExecutor;
 import com.api.deployer.system.console.Console;
-
+import com.api.deployer.system.linux.scripts.bash.BashScriptExecutor;
+import com.api.deployer.system.scripts.IScriptExecutor;
+import com.redshape.utils.config.ConfigException;
+import com.redshape.utils.config.IConfig;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

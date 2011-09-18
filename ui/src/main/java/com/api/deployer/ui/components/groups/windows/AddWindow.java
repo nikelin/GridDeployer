@@ -19,6 +19,7 @@ import com.redshape.utils.IFilter;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class AddWindow extends JFrame {
 	private static final long serialVersionUID = -5099773509497140928L;
 	
